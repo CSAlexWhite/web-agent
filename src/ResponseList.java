@@ -1,16 +1,20 @@
-import java.util.Vector;
-
-
+/**
+ * The one-dimensional list of responses ever entered, each index corresponds
+ * to the ID that the Response is assigned.
+ * 
+ * @author Alex White
+ *
+ */
 public class ResponseList {
 	
 	Response[] masterList;
 	int nextEmpty;
-
+	
 	public ResponseList(int size, Response root){
 			
 		nextEmpty = 0;						// set the first position
 		masterList = new Response[size];	// initialize the array
-		this.add(root, root);				// add the first response
+		masterList[0] = root;				// add the first response
 	}
 	
 	/**
@@ -18,34 +22,53 @@ public class ResponseList {
 	 * for the directed graph;
 	 * @param newResponse
 	 */
-	public void add(Response currentResponse, Response newResponse){
-				
+	public void add(Response current, Response newResponse){
+		
+			
 		masterList[nextEmpty] = newResponse;// put the first response
 											// into the array
-		nextEmpty++;						// increment the next										
+					
+		Main.memory.addEdge(current, newResponse);
+		nextEmpty++;						// increment the next	
 	}
 	
+	/**
+	 * Given the response ID number, return a reference to the response
+	 * 
+	 * @param idNumber
+	 * @return
+	 */
 	Response getResponseAt(int idNumber){
 		
-		return MasterList.get(idNumber);
+		return masterList[idNumber];
 	}
 	
-	Response findResponse(String target){
-		
-		for(int i=0; i<MasterList.size(); i++){
+	/**
+	 * Given an input string (and the current response) return it if it exists
+	 * as a previous response, else add it to the response list and return a
+	 * reference to the new Response
+	 * 
+	 * @param current
+	 * @param target
+	 * @return
+	 */
+	Response findResponse(Response current, String target){
 			
-			if(MasterList.get(i).getContent() == target) 
-				
-				return MasterList.get(i);
+		for(int i=0; i<getSize(); i++){				// Search for the target
+			if(masterList[i].getContent() == target) 			
+				return masterList[i];
 		}
 		
-		add(new Response(target));
-		
-		return MasterList.lastElement();
+		add(current, new Response(target));		// if not found, add it		
+		return masterList[getSize()];			// and return that
 	}
 	
+	/**
+	 * Returns the current length of the list of responses
+	 * @return
+	 */
 	public int getSize(){
 		
-		return MasterList.size();
+		return nextEmpty;
 	}
 }
