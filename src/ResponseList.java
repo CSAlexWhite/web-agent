@@ -3,11 +3,26 @@ import java.util.Vector;
 
 public class ResponseList {
 	
-	Vector<Response> MasterList;
+	Response[] masterList;
+	int nextEmpty;
 
-	public ResponseList(){
-		
-		MasterList = new Vector<Response>(0);
+	public ResponseList(int size, Response root){
+			
+		nextEmpty = 0;						// set the first position
+		masterList = new Response[size];	// initialize the array
+		this.add(root, root);				// add the first response
+	}
+	
+	/**
+	 * Adds a new response to the list, updates the adjacency matrix
+	 * for the directed graph;
+	 * @param newResponse
+	 */
+	public void add(Response currentResponse, Response newResponse){
+				
+		masterList[nextEmpty] = newResponse;// put the first response
+											// into the array
+		nextEmpty++;						// increment the next										
 	}
 	
 	Response getResponseAt(int idNumber){
@@ -23,5 +38,14 @@ public class ResponseList {
 				
 				return MasterList.get(i);
 		}
+		
+		add(new Response(target));
+		
+		return MasterList.lastElement();
+	}
+	
+	public int getSize(){
+		
+		return MasterList.size();
 	}
 }
