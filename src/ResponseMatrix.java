@@ -8,7 +8,7 @@ public class ResponseMatrix {
 	// test Matrix with size x size array
 	
 	public int[][] matrix;
-	private int dimension;
+	public int dimension;
 	
 	public int totalResponses;
 	
@@ -16,7 +16,7 @@ public class ResponseMatrix {
 	String choice2;
 	int flip;
 	int tempTo;
-	int start = 1; // start a the first user-entered response
+	int start = 0; // start a the first user-entered response
 	
 	public ResponseMatrix(int size){
 		
@@ -99,11 +99,22 @@ public class ResponseMatrix {
 
 	public void print(){
 		
+		System.out.println("REPEAT ID : " + Main.dictionary.repeatID);
+		System.out.print("\t");
+		for(int i=0; i<dimension; i++) System.out.print(i + "   ");
+		System.out.print("\tID\tResponse");
+		System.out.println("\n");
 		for(int i=0; i<dimension; i++){
+			System.out.print(i + "\t");
 			for(int j=0; j<dimension; j++)
 				System.out.print(matrix[i][j] + "   ");
-			System.out.println();
+			System.out.println("\t" + Main.dictionary.getResponseAt(i).getID() 
+					+ "\t" + Main.dictionary.getResponseAt(i).toString());
 		}
+		
+		System.out.print("\n\t");
+		for(int i=0; i<dimension; i++) System.out.print(i + "   ");
+		System.out.println("");
 	}
 	
 	public void printC(){
@@ -111,5 +122,10 @@ public class ResponseMatrix {
 		System.out.println("\n" + choice1 + " OR " + choice2);
 		System.out.println("Flip is: " + flip + "%2= " + flip%2);
 	}
+	
+//	public Response printE(String input){
+//		
+//		
+//	}
 
 }

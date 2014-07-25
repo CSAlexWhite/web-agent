@@ -24,21 +24,21 @@ public class ResponseList {
 	 * for the directed graph;
 	 * @param newResponse
 	 */
-	public Response add(Response last, Response newResponse){
+	public void add(Response last, Response newResponse){
 		
 		if(findResponse(newResponse.toString())){ 	// if the response is already there
 			
-			Main.memory.addEdge(last.getID(), repeatID); // increment the edge between
-			return Main.dictionary.getResponseAt(repeatID);											// current and the repeat
+			Main.memory.addEdge(last, Main.dictionary.getResponseAt(repeatID)); // increment the edge between
+			return;// Main.dictionary.getResponseAt(repeatID);											// current and the repeat
 		}
 
 		else{
 			masterList[nextEmpty] = newResponse;		// put the first response
 														// into the array					
 			Main.memory.addEdge(last, newResponse);
-			Main.memory.totalResponses++;
-			nextEmpty++;
-			return newResponse;
+			nextEmpty++;			
+			Main.memory.dimension = nextEmpty;
+			return; // newResponse;
 		}
 	}
 	
@@ -87,7 +87,7 @@ public class ResponseList {
 		
 		for(int i=0; i<nextEmpty; i++){
 			
-			System.out.println(getResponseAt(i));
+			System.out.println(getResponseAt(i) + ":\t" + getResponseAt(i).getID());
 		}
 	}
 }

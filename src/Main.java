@@ -15,6 +15,7 @@ public class Main {
 		
 		boolean responseFlag = false;
 		boolean printChoice = false;
+		boolean fullDebug = false;
 		
 		/*INITIALIZING RESPONSE VARIABLES*/
 		String input = null;
@@ -57,7 +58,11 @@ public class Main {
 			if(input.equalsIgnoreCase("printd")){ 
 				discussion.print();
 				continue;
-			}								
+			}				
+			if(input.equalsIgnoreCase("printall")){ 
+				fullDebug ^= true;
+				continue;
+			}	
 			if(input.equalsIgnoreCase("exit")) break;
 			
 			/*TRAINING MODE*/
@@ -65,8 +70,19 @@ public class Main {
 				
 				// add a new Response, based on the last Response and the input
 				next = new Response(last, input);
+				System.out.println(last.getID() + "\t" + next.getID());
+								
 				//discussion.addNext(next);
 				last = next;					// that response is the new stimulus
+				if(fullDebug == true){
+					
+					//System.out.println(
+						//"Last = " + last.toString()
+						//+ "\nNext = " + next.toString()
+						//+ "\nNextEmpty = " + dictionary.nextEmpty
+						//+ "\nDimension = " + memory.dimension);
+					memory.print();
+				}			
 			}
 			
 			/*CONVERSATION MODE*/ // is it doing anything with input?
@@ -75,21 +91,32 @@ public class Main {
 				//next = new Response(last, input);
 				
 				// get a new Response based on the last Response
-//				next = memory.getNext(last);	// AI ALGORITHM!!
-//				
-//				discussion.addNext(next);
-//				System.out.println(next.toString());
-//				last = next;
-//				next = new Response(last, input);
-//				discussion.addNext(next);
+				next = memory.getNext(last);	// AI ALGORITHM!!
 				
-				discussion.addNext(input);
-				next = new Response(last, input);
-				last = next;
-				next = memory.getNext(last);
-				System.out.println(next.toString());
 				discussion.addNext(next);
+				System.out.println(next.toString());
 				last = next;
+				next = new Response(last, input);
+				discussion.addNext(next);
+				
+//				discussion.addNext(input);
+//				next = new Response(last, input);
+//				last = next;
+//				next = memory.getNext(last);
+				
+				if(fullDebug == true){
+					
+					//System.out.println(
+						//"Last = " + last.toString()
+						//+ "\nNext = " + next.toString()
+						//+ "\nNextEmpty = " + dictionary.nextEmpty
+						//+ "\nDimension = " + memory.dimension);
+					memory.print();
+				}
+				
+//				System.out.println(next.toString());
+//				discussion.addNext(next);
+//				last = next;
 				
 				if(printChoice == true) memory.printC();
 			}

@@ -12,10 +12,12 @@ public class Response {
 	
 	public Response(Response last, String input){
 		
-		content = input;	// adds the response content to the object
-		id = Main.dictionary.getSize();		// assigns it a unique id number
-		Main.dictionary.add(last, this);	// adds this response to the
-											// big list of responses		
+		content = input;	// adds the response content to the object			WORKS
+		id = Main.dictionary.getSize();		// assigns it a unique id number 	WORKS
+		
+		Main.dictionary.add(last, this);	// adds this response to the		
+											// big list of responses
+		Main.memory.dimension = Main.dictionary.nextEmpty;
 	}
 	
 	/**
