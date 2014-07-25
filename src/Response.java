@@ -28,7 +28,7 @@ public class Response {
 		id = 0;
 	}
 	
-	public String getContent(){
+	public String toString(){
 		
 		return content;
 	}

@@ -8,13 +8,15 @@
 public class ResponseList {
 	
 	Response[] masterList;
-	int nextEmpty;
+	int nextEmpty = 1; 		// set the first position	
+	int repeatID = 0;		// the position to reference if a repeat phrase
+							// is found
 	
-	public ResponseList(int size, Response root){
-			
-		nextEmpty = 0;						// set the first position
-		masterList = new Response[size];	// initialize the array
-		masterList[0] = root;				// add the first response
+	public ResponseList(int size){
+					
+		masterList = new Response[size];			// initialize the array
+		masterList[0] = new Response("Hi there!");	// add the first response
+							
 	}
 	
 	/**
@@ -22,14 +24,22 @@ public class ResponseList {
 	 * for the directed graph;
 	 * @param newResponse
 	 */
-	public void add(Response current, Response newResponse){
+	public Response add(Response last, Response newResponse){
 		
+		if(findResponse(newResponse.toString())){ 	// if the response is already there
 			
-		masterList[nextEmpty] = newResponse;// put the first response
-											// into the array
-					
-		Main.memory.addEdge(current, newResponse);
-		nextEmpty++;						// increment the next	
+			Main.memory.addEdge(last.getID(), repeatID); // increment the edge between
+			return Main.dictionary.getResponseAt(repeatID);											// current and the repeat
+		}
+
+		else{
+			masterList[nextEmpty] = newResponse;		// put the first response
+														// into the array					
+			Main.memory.addEdge(last, newResponse);
+			Main.memory.totalResponses++;
+			nextEmpty++;
+			return newResponse;
+		}
 	}
 	
 	/**
@@ -52,15 +62,16 @@ public class ResponseList {
 	 * @param target
 	 * @return
 	 */
-	Response findResponse(Response current, String target){
+	Boolean findResponse(String target){
 			
-		for(int i=0; i<getSize(); i++){				// Search for the target
-			if(masterList[i].getContent() == target) 			
-				return masterList[i];
+		for(int i=0; i<nextEmpty; i++){				// Search for the target
+			if(masterList[i].toString().equalsIgnoreCase(target)){
+				repeatID = i;						// where the target is
+				return true;
+			}			
 		}
 		
-		add(current, new Response(target));		// if not found, add it		
-		return masterList[getSize()];			// and return that
+		return false;
 	}
 	
 	/**
@@ -70,5 +81,13 @@ public class ResponseList {
 	public int getSize(){
 		
 		return nextEmpty;
+	}
+	
+	public void print(){
+		
+		for(int i=0; i<nextEmpty; i++){
+			
+			System.out.println(getResponseAt(i));
+		}
 	}
 }
