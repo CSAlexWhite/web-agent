@@ -68,6 +68,8 @@ public class ResponseMatrix {
 
 	public void print(){
 		
+		dimension = Main.dictionary.nextEmpty;
+		
 		System.out.println("REPEAT ID : " + Main.dictionary.repeatID);
 		System.out.print("\t");
 		for(int i=0; i<dimension; i++) System.out.print(i + "  ");

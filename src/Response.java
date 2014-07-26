@@ -16,12 +16,15 @@ public class Response {
 		if(!training) Main.discussion.addNext(input);	// adds the content to the discussion
 					
 		// looks for the Response already, if there, overwrite it. 
-		if(Main.dictionary.findResponse(input)) id = Main.dictionary.repeatID;					
+		if(Main.dictionary.findResponse(input)){
+			id = Main.dictionary.repeatID;
+			Main.memory.addEdge(last.getID(),id);
+		}
 		
 		// otherwise assigns it a unique id
-		else{ id = Main.dictionary.getSize(); content = input;}
-		
-		Main.dictionary.add(last, this); // adds this to the list of responses
+		else{ 	id = Main.dictionary.getSize(); content = input;		
+				Main.dictionary.add(last, this); // adds this to the list of responses
+		}
 		
 		Main.memory.dimension = Main.dictionary.nextEmpty;		
 	}

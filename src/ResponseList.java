@@ -28,7 +28,7 @@ public class ResponseList {
 		if(findResponse(newResponse.toString())){ 	// if the response is already there
 			
 			Main.memory.addEdge(last, Main.dictionary.getResponseAt(repeatID)); // increment the edge between
-			return;// Main.dictionary.getResponseAt(repeatID);											// current and the repeat
+			return;											// current and the repeat
 		}
 
 		else{
@@ -37,7 +37,7 @@ public class ResponseList {
 			Main.memory.addEdge(last, newResponse);
 			nextEmpty++;			
 			Main.memory.dimension = nextEmpty;
-			return; // newResponse;
+			return; 
 		}
 	}
 	
@@ -63,11 +63,10 @@ public class ResponseList {
 	 */
 	public Boolean findResponse(String target){
 		
-		repeatID = 0;
-		System.out.println("findResponse : " + nextEmpty);
+		//System.out.println("findResponse : " + nextEmpty);
 			
 		for(int i=0; i<nextEmpty; i++){				// Search for the target
-			System.out.println(i);
+			//System.out.println(i);
 			if(masterList[i].toString().equalsIgnoreCase(target)){
 				repeatID = i;						// where the target is
 				return true;

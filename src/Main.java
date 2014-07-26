@@ -76,9 +76,15 @@ public class Main {
 			if(responseFlag == false){
 				
 				next = new Response(last, input, true);
+				//System.out.println(last + " " + next + " " + dictionary.nextEmpty);
 				last = next;
 				
-				if(fullDebug == true) memory.print();
+				
+				
+				if(fullDebug == true){
+					memory.print();
+					dictionary.print();
+				}
 			
 			}
 			
@@ -91,7 +97,11 @@ public class Main {
 				last = next;			
 				System.out.println(next.toString());
 				
-				if(fullDebug == true) memory.print();				
+				if(fullDebug == true){
+					memory.print();
+					dictionary.print();
+				}
+				
 				if(printChoice == true) memory.printC();
 			}
 		}
