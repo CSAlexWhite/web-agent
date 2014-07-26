@@ -12,10 +12,6 @@ public class ResponseMatrix {
 	
 	public int totalResponses;
 	
-	String choice1;
-	String choice2;
-	int flip;
-	int tempTo;
 	int start = 0; // start a the first user-entered response
 	
 	public ResponseMatrix(int size){
@@ -57,77 +53,43 @@ public class ResponseMatrix {
 	public Response getNext(Response from){
 		
 		dimension = Main.dictionary.nextEmpty;
-		int maxTest = 0;
-		int tempTo1 = 0, tempTo2 = 0;
-		tempTo = 0;
+		int fromID = from.getID();
+		int toID = 0;
+		int readValue = matrix[fromID][0];
 		
-		// CURRENT RESPONSE CHOICE ALGORITHM!		
-		//find the highest weight edge
-		int tempMax = matrix[from.getID()][0];
-		for(int i=start; i<dimension; i++){
-					
-			if(matrix[from.getID()][i] > tempMax){ 
-				tempMax = matrix[from.getID()][i];
-				tempTo2 = i;
-			}
+		while(readValue == 0){
 			
-			else tempTo2 = 1;
-			
-		}//Find another edge
-		tempTo1 = (int)(Math.random()*(dimension));
+			toID++;
+			readValue = matrix[fromID][toID];
+		}		
 		
-		while(matrix[from.getID()][tempTo1] == 0 
-				&& maxTest < 100 
-				&& tempTo1 == tempTo2
-				&& tempTo1 <= start)
-		{			
-			tempTo1 = (int)(Math.random()*(dimension));
-			maxTest++;
-		}
-				
-		flip = (int)(Math.random()*dimension);
-		if(flip%2 == 0) tempTo = tempTo1;
-		if(flip%2 == 1) tempTo = tempTo2;
-		
-		choice1 = Main.dictionary.getResponseAt(tempTo1).toString();
-		choice2 = Main.dictionary.getResponseAt(tempTo2).toString();
-		//System.out.println(choice1 + " OR " + choice2);
-		
-		// if I found a real response
-		//if(matrix[from.getID()][tempTo] != 0) 
-		return Main.dictionary.getResponseAt(tempTo2);
-		//return Main.dictionary.getResponseAt(0);
+		return Main.dictionary.getResponseAt(toID);
 	}
 
 	public void print(){
 		
 		System.out.println("REPEAT ID : " + Main.dictionary.repeatID);
 		System.out.print("\t");
-		for(int i=0; i<dimension; i++) System.out.print(i + " ");
+		for(int i=0; i<dimension; i++) System.out.print(i + "  ");
 		System.out.print("\tID\tResponse");
 		System.out.println("\n");
 		for(int i=0; i<dimension; i++){
 			System.out.print(i + "\t");
 			for(int j=0; j<dimension; j++)
-				System.out.print(matrix[i][j] + " ");
+				System.out.print(matrix[i][j] + "  ");
 			System.out.println("\t" + Main.dictionary.getResponseAt(i).getID() 
 					+ "\t" + Main.dictionary.getResponseAt(i).toString());
 		}
 		
 		System.out.print("\n\t");
-		for(int i=0; i<dimension; i++) System.out.print(i + " ");
+		for(int i=0; i<dimension; i++) System.out.print(i + "  ");
 		System.out.println("");
 	}
 	
+	String choice1, choice2;
 	public void printC(){
 		
 		System.out.println("\n" + choice1 + " OR " + choice2);
-		System.out.println("Flip is: " + flip + "%2= " + flip%2);
+		//System.out.println("Flip is: " + flip + "%2= " + flip%2);
 	}
-	
-//	public Response printE(String input){
-//		
-//		
-//	}
-
 }

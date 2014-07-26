@@ -9,8 +9,9 @@ public class Main {
 	
 	public static ResponseList dictionary;
 	public static ResponseMatrix memory;
+	public static Conversation training;
 	public static Conversation discussion;
-		
+			
 	public static void main(String[] args) throws Exception {
 		
 		boolean responseFlag = false;
@@ -19,7 +20,7 @@ public class Main {
 		
 		/*INITIALIZING RESPONSE VARIABLES*/
 		String input = null;
-		Response last, next = null;
+		Response last = null, next = null;
 		
 		/*STUFF FOR READING CONSOLE INPUT*/
 		InputStreamReader sreader = new InputStreamReader(System.in);
@@ -28,10 +29,12 @@ public class Main {
 		/*STUFF FOR INITIALIZING MEMORY AND HISTORY*/
 		int brainSize = 1000;
 		dictionary = new ResponseList(brainSize);
-		memory = new ResponseMatrix(brainSize);	
-		discussion = new Conversation("");
+		memory = new ResponseMatrix(brainSize);
+		training = new Conversation("", true);
+		training.readFile("data.txt");
+		discussion = new Conversation("", false);
 		last = dictionary.getResponseAt(0);
-			
+					
 		/*START THE CONVERSATION*/
 		System.out.println(last.toString());		
 		while(true){ System.out.print(": ");
@@ -63,61 +66,32 @@ public class Main {
 				fullDebug ^= true;
 				continue;
 			}	
-			if(input.equalsIgnoreCase("exit")) break;
+			if(input.equalsIgnoreCase("exit")){
+				
+				training.writeFile("data.txt");
+				break;
+			}
 			
 			/*TRAINING MODE*/
 			if(responseFlag == false){
 				
-				// add a new Response, based on the last Response and the input
-				next = new Response(last, input);
-				//System.out.println(last.getID() + "\t" + next.getID());
-								
-				//discussion.addNext(next);
-				last = next;					// that response is the new stimulus
-				if(fullDebug == true){
-					
-					//System.out.println(
-						//"Last = " + last.toString()
-						//+ "\nNext = " + next.toString()
-						//+ "\nNextEmpty = " + dictionary.nextEmpty
-						//+ "\nDimension = " + memory.dimension);
-					memory.print();
-				}			
+				next = new Response(last, input, true);
+				last = next;
+				
+				if(fullDebug == true) memory.print();
+			
 			}
 			
-			/*CONVERSATION MODE*/ // is it doing anything with input?
+			/*CONVERSATION MODE*/ 
 			if(responseFlag == true){
 				
-				//next = new Response(last, input);
-				
-				// get a new Response based on the last Response
-				next = memory.getNext(last);	// AI ALGORITHM!!
-				
-				discussion.addNext(next);
+				next = new Response(last, input, false);			
+				last = next;	
+				next = memory.getNext(last);// AI ALGORITHM!!
+				last = next;			
 				System.out.println(next.toString());
-				last = next;
-				next = new Response(last, input);
-				discussion.addNext(next);
 				
-//				discussion.addNext(input);
-//				next = new Response(last, input);
-//				last = next;
-//				next = memory.getNext(last);
-				
-				if(fullDebug == true){
-					
-					//System.out.println(
-						//"Last = " + last.toString()
-						//+ "\nNext = " + next.toString()
-						//+ "\nNextEmpty = " + dictionary.nextEmpty
-						//+ "\nDimension = " + memory.dimension);
-					memory.print();
-				}
-				
-//				System.out.println(next.toString());
-//				discussion.addNext(next);
-//				last = next;
-				
+				if(fullDebug == true) memory.print();				
 				if(printChoice == true) memory.printC();
 			}
 		}

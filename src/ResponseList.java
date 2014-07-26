@@ -7,7 +7,7 @@
  */
 public class ResponseList {
 	
-	Response[] masterList;
+	private Response[] masterList;
 	int nextEmpty = 1; 		// set the first position	
 	int repeatID = 0;		// the position to reference if a repeat phrase
 							// is found
@@ -15,8 +15,7 @@ public class ResponseList {
 	public ResponseList(int size){
 					
 		masterList = new Response[size];			// initialize the array
-		masterList[0] = new Response("Hi there!");	// add the first response
-							
+		masterList[0] = new Response("Hi there!");	// add the first response							
 	}
 	
 	/**
@@ -63,8 +62,12 @@ public class ResponseList {
 	 * @return
 	 */
 	public Boolean findResponse(String target){
+		
+		repeatID = 0;
+		System.out.println("findResponse : " + nextEmpty);
 			
 		for(int i=0; i<nextEmpty; i++){				// Search for the target
+			System.out.println(i);
 			if(masterList[i].toString().equalsIgnoreCase(target)){
 				repeatID = i;						// where the target is
 				return true;
