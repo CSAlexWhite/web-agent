@@ -70,7 +70,7 @@ public class Main {
 				
 				// add a new Response, based on the last Response and the input
 				next = new Response(last, input);
-				System.out.println(last.getID() + "\t" + next.getID());
+				//System.out.println(last.getID() + "\t" + next.getID());
 								
 				//discussion.addNext(next);
 				last = next;					// that response is the new stimulus

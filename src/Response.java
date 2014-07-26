@@ -8,16 +8,17 @@
 public class Response {
 
 	private String content;		// the content of this response
-	private final int id;		// the primary key of this response
+	private int id;		// the primary key of this response
 	
 	public Response(Response last, String input){
 		
-		content = input;	// adds the response content to the object			WORKS
-		id = Main.dictionary.getSize();		// assigns it a unique id number 	WORKS
-		
+		content = input;	// adds the response content to the object			WORKS	
+		if(Main.dictionary.findResponse(input)) id = Main.dictionary.repeatID;		
+		else id = Main.dictionary.getSize();// assigns it a unique id number 	WORKS
 		Main.dictionary.add(last, this);	// adds this response to the		
 											// big list of responses
 		Main.memory.dimension = Main.dictionary.nextEmpty;
+		
 	}
 	
 	/**

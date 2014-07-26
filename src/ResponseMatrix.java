@@ -71,6 +71,8 @@ public class ResponseMatrix {
 				tempTo2 = i;
 			}
 			
+			else tempTo2 = 1;
+			
 		}//Find another edge
 		tempTo1 = (int)(Math.random()*(dimension));
 		
@@ -93,7 +95,7 @@ public class ResponseMatrix {
 		
 		// if I found a real response
 		//if(matrix[from.getID()][tempTo] != 0) 
-		return Main.dictionary.getResponseAt(tempTo);
+		return Main.dictionary.getResponseAt(tempTo2);
 		//return Main.dictionary.getResponseAt(0);
 	}
 
@@ -101,19 +103,19 @@ public class ResponseMatrix {
 		
 		System.out.println("REPEAT ID : " + Main.dictionary.repeatID);
 		System.out.print("\t");
-		for(int i=0; i<dimension; i++) System.out.print(i + "   ");
+		for(int i=0; i<dimension; i++) System.out.print(i + " ");
 		System.out.print("\tID\tResponse");
 		System.out.println("\n");
 		for(int i=0; i<dimension; i++){
 			System.out.print(i + "\t");
 			for(int j=0; j<dimension; j++)
-				System.out.print(matrix[i][j] + "   ");
+				System.out.print(matrix[i][j] + " ");
 			System.out.println("\t" + Main.dictionary.getResponseAt(i).getID() 
 					+ "\t" + Main.dictionary.getResponseAt(i).toString());
 		}
 		
 		System.out.print("\n\t");
-		for(int i=0; i<dimension; i++) System.out.print(i + "   ");
+		for(int i=0; i<dimension; i++) System.out.print(i + " ");
 		System.out.println("");
 	}
 	

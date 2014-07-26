@@ -62,7 +62,7 @@ public class ResponseList {
 	 * @param target
 	 * @return
 	 */
-	Boolean findResponse(String target){
+	public Boolean findResponse(String target){
 			
 		for(int i=0; i<nextEmpty; i++){				// Search for the target
 			if(masterList[i].toString().equalsIgnoreCase(target)){
