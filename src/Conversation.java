@@ -11,9 +11,8 @@ public class Conversation {
 	String convo= null;
 	boolean training = false;
 	
-	public Conversation(String first, boolean training){		
+	public Conversation(String first){		
 		convo = first.toString();
-		this.training = training;
 	}
 	
 	public void addNext(Response next){ 
@@ -24,34 +23,89 @@ public class Conversation {
 		convo += "\n" + next; 
 	}
 	
-	public void readFile(String filename) throws IOException{
+	public void readFile(String matrix, String responses) throws IOException{
 		
-		String firstLine = null, nextLine = null;
+//		String firstLine = null, nextLine = null;
+//		
+//		BufferedReader inFile = new BufferedReader(new FileReader(filename));
+//		firstLine = inFile.readLine();
+//		Response next, last = new Response(firstLine);
+//		
+//		while(inFile.ready()){
+//			
+//			nextLine = inFile.readLine();
+//			next = new Response(last, nextLine, training);
+//			last = next;
+//			addNext(nextLine);			
+//		}
+//		
+//		inFile.close();	
 		
-		BufferedReader inFile = new BufferedReader(new FileReader(filename));
-		firstLine = inFile.readLine();
-		Response next, last = new Response(firstLine);
+		String nextLine = null;
 		
-		while(inFile.ready()){
+		BufferedReader inFile1 = new BufferedReader(new FileReader(matrix));
+		BufferedReader inFile2 = new BufferedReader(new FileReader(responses));
+		
+		int rows = 0, cols = 0;
+		
+		while(inFile1.ready()){
 			
-			nextLine = inFile.readLine();
-			next = new Response(last, nextLine, training);
-			last = next;
-			addNext(nextLine);			
+			nextLine = inFile1.readLine();
+			StringTokenizer dimensions = new StringTokenizer(nextLine, " ");
+			
+			while(dimensions.hasMoreTokens()){
+				Main.memory.matrix[rows][cols++] = 
+						Integer.parseInt(dimensions.nextToken());
+			}
+			
+			rows++;
+			Main.dictionary.nextEmpty++;
+			Main.memory.dimension++;
+		}	
+		
+		inFile1.close();		
+		
+		int lineNum = 0;
+		while(inFile2.ready()){
+			
+			nextLine = inFile2.readLine();
+			Main.dictionary.add(nextLine, lineNum);
 		}
 		
-		inFile.close();	
+		inFile2.close();
 	}
 	
-	public void writeFile(String filename) throws IOException{
+	public void writeFile(String matrix, String responses) throws IOException{
 		
-		PrintWriter newFile = new PrintWriter(filename);
+//		PrintWriter newFile = new PrintWriter(filename);
+//		
+//		StringTokenizer output = new StringTokenizer(convo, "\n");
+//		
+//		while(output.hasMoreElements()) newFile.println(output.nextToken());
+//			
+//		newFile.close();
 		
-		StringTokenizer output = new StringTokenizer(convo, "\n");
+		PrintWriter newFile1 = new PrintWriter(matrix);
+		PrintWriter newFile2 = new PrintWriter(responses);
 		
-		while(output.hasMoreElements()) newFile.println(output.nextToken());
+		for(int i=0; i<Main.dictionary.nextEmpty; i++){
 			
-		newFile.close();
+			for(int j=0; j<Main.dictionary.nextEmpty; j++){
+				
+				newFile1.print(Main.memory.matrix[i][j] + " ");
+			}
+			
+			newFile1.println();
+		}
+		
+		newFile1.close();
+		
+		for(int i=0; i<Main.dictionary.nextEmpty; i++){
+			
+			newFile2.println(Main.dictionary.getResponseAt(i).toString());
+		}
+		
+		newFile2.close();
 	}
 	
 	public void print(){ 

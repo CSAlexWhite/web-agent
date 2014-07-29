@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * The one-dimensional list of responses ever entered, each index corresponds
  * to the ID that the Response is assigned.
@@ -15,7 +20,7 @@ public class ResponseList {
 	public ResponseList(int size){
 					
 		masterList = new Response[size];			// initialize the array
-		masterList[0] = new Response("Hi there!");	// add the first response							
+		masterList[0] = new Response("Hi there!", 0);	// add the first response							
 	}
 	
 	/**
@@ -39,6 +44,11 @@ public class ResponseList {
 			Main.memory.dimension = nextEmpty;
 			return; 
 		}
+	}
+	
+	public void add(String input, int id){
+		
+		masterList[id] = new Response(input, id);
 	}
 	
 	/**
@@ -89,7 +99,36 @@ public class ResponseList {
 		
 		for(int i=0; i<nextEmpty; i++){
 			
-			System.out.println(getResponseAt(i) + ":\t" + getResponseAt(i).getID());
+			System.out.println(getResponseAt(i).getID() + ":\t" + getResponseAt(i));
 		}
+	}
+	
+	public void writeFile(String filename) throws IOException{
+		
+		PrintWriter newFile = new PrintWriter(filename);
+		
+		for(int i=0; i<nextEmpty; i++){
+			
+			newFile.println(masterList[i]);
+		}
+		
+		newFile.close();
+	}
+	
+	public void readFile(String filename) throws IOException{
+		
+		String nextLine = null;	
+		BufferedReader inFile = new BufferedReader(new FileReader(filename));
+		
+		int lineNum = 0;
+		while(inFile.ready()){
+			
+			nextLine = inFile.readLine();
+			add(nextLine, lineNum);
+			lineNum++;
+			nextEmpty = lineNum;
+		}
+		
+		inFile.close();
 	}
 }

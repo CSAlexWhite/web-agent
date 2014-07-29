@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+
 /**
  * The representation of the memory graph as an adjacency matrix
  * @author Alex
@@ -49,7 +55,7 @@ public class ResponseMatrix {
 		
 		matrix[from][to]++;
 	}
-	
+
 	public Response getNext(Response from){
 		
 		dimension = Main.dictionary.nextEmpty;
@@ -73,14 +79,14 @@ public class ResponseMatrix {
 		System.out.println("REPEAT ID : " + Main.dictionary.repeatID);
 		System.out.print("\t");
 		for(int i=0; i<dimension; i++) System.out.print(i + "  ");
-		System.out.print("\tID\tResponse");
+		System.out.print("  \tID  Response");
 		System.out.println("\n");
 		for(int i=0; i<dimension; i++){
 			System.out.print(i + "\t");
 			for(int j=0; j<dimension; j++)
 				System.out.print(matrix[i][j] + "  ");
-			System.out.println("\t" + Main.dictionary.getResponseAt(i).getID() 
-					+ "\t" + Main.dictionary.getResponseAt(i).toString());
+			System.out.println("  \t" + Main.dictionary.getResponseAt(i).getID() 
+					+ "  " + Main.dictionary.getResponseAt(i).toString());
 		}
 		
 		System.out.print("\n\t");
@@ -93,5 +99,42 @@ public class ResponseMatrix {
 		
 		System.out.println("\n" + choice1 + " OR " + choice2);
 		//System.out.println("Flip is: " + flip + "%2= " + flip%2);
+	}
+	
+	public void writeFile(String filename) throws IOException{
+
+		PrintWriter newFile = new PrintWriter(filename);
+		
+		for(int i=0; i<Main.dictionary.nextEmpty; i++){
+			
+			for(int j=0; j<Main.dictionary.nextEmpty; j++){
+				
+				newFile.print(matrix[i][j] + " ");
+			}
+			
+			newFile.println();
+		}
+		
+		newFile.close();
+	}
+
+	public void readFile(String filename) throws IOException{
+			
+		String nextLine = null;		
+		BufferedReader inFile = new BufferedReader(new FileReader(filename));
+		StringTokenizer textLine;
+		
+		int rows = 0, cols = 0;	
+		
+		for(int i=0; i<Main.dictionary.nextEmpty; i++){
+			nextLine = inFile.readLine();
+			textLine = new StringTokenizer(nextLine, " ");
+			
+			for(int j=0; j<Main.dictionary.nextEmpty; j++){
+				matrix[i][j] = Integer.parseInt(textLine.nextToken());
+			}
+		}
+		
+		inFile.close();		
 	}
 }

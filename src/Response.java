@@ -10,10 +10,19 @@ public class Response {
 	private String content;		// the content of this response
 	private int id;				// the primary key of this response
 	
+	/**
+	 * A new response from the user, when created its content is set and it
+	 * asks the ResponseList if it exists yet, if so, its ID is set to the 
+	 * ID of the extant Response, if not, it's added to the end of the list
+	 * @param last
+	 * @param input
+	 * @param training
+	 */
 	public Response(Response last, String input, boolean training){
 		
-		if(training) Main.training.addNext(input);
-		if(!training) Main.discussion.addNext(input);	// adds the content to the discussion
+		//if(training) Main.training.addNext(input);
+		//if(!training) 
+		Main.discussion.addNext(input);	// adds the content to the discussion
 					
 		// looks for the Response already, if there, overwrite it. 
 		if(Main.dictionary.findResponse(input)){
@@ -29,10 +38,10 @@ public class Response {
 		Main.memory.dimension = Main.dictionary.nextEmpty;		
 	}
 	
-	public Response(String input){
+	public Response(String input, int idNum){
 		
 		content = input;
-		id = 0;
+		id = idNum;
 	}
 	
 	public String toString(){
@@ -43,5 +52,10 @@ public class Response {
 	public int getID(){
 		
 		return id;
+	}
+	
+	public boolean equals(Response target){
+		
+		
 	}
 }

@@ -22,18 +22,20 @@ public class Main {
 		String input = null;
 		Response last = null, next = null;
 		
-		/*STUFF FOR READING CONSOLE INPUT*/
-		InputStreamReader sreader = new InputStreamReader(System.in);
-		BufferedReader reader = new BufferedReader(sreader);
-		
 		/*STUFF FOR INITIALIZING MEMORY AND HISTORY*/
 		int brainSize = 1000;
 		dictionary = new ResponseList(brainSize);
 		memory = new ResponseMatrix(brainSize);
-		training = new Conversation("", true);
-		training.readFile("data.txt");
-		discussion = new Conversation("", false);
+		discussion = new Conversation("");
+		
+		dictionary.readFile("list.txt");
+		memory.readFile("matrix.txt");
+				
 		last = dictionary.getResponseAt(0);
+		
+		/*STUFF FOR READING CONSOLE INPUT*/
+		InputStreamReader sreader = new InputStreamReader(System.in);
+		BufferedReader reader = new BufferedReader(sreader);
 					
 		/*START THE CONVERSATION*/
 		System.out.println(last.toString());		
@@ -61,14 +63,18 @@ public class Main {
 			if(input.equalsIgnoreCase("printd")){ 
 				discussion.print();
 				continue;
-			}				
+			}		
+			if(input.equalsIgnoreCase("printv")){
+				System.out.println("memory.");
+			}
 			if(input.equalsIgnoreCase("printall")){ 
 				fullDebug ^= true;
 				continue;
 			}	
 			if(input.equalsIgnoreCase("exit")){
 				
-				training.writeFile("data.txt");
+				dictionary.writeFile("list.txt");
+				memory.writeFile("matrix.txt");
 				break;
 			}
 			
@@ -78,14 +84,11 @@ public class Main {
 				next = new Response(last, input, true);
 				//System.out.println(last + " " + next + " " + dictionary.nextEmpty);
 				last = next;
-				
-				
-				
+								
 				if(fullDebug == true){
 					memory.print();
 					dictionary.print();
-				}
-			
+				}		
 			}
 			
 			/*CONVERSATION MODE*/ 
