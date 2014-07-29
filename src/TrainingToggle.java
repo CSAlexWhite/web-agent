@@ -2,12 +2,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class InputActionListener implements ActionListener {
+public class TrainingToggle implements ActionListener {
 
-	@Override
+	boolean toggle = true;
+	
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
 		
+		toggle = Main.trainingToggle;
+		toggle ^= true;
 	}
 
 }

@@ -13,12 +13,14 @@ public class Main {
 	public static ResponseMatrix memory;
 	public static Conversation training;
 	public static Conversation discussion;
-			
+	
+	static Boolean trainingToggle = false;		
+	
 	public static void main(String[] args) throws Exception {
 		
 		JFrame mainWindow;
 		
-		boolean responseFlag = false;
+		
 		boolean printChoice = false;
 		boolean fullDebug = false;
 		
@@ -52,22 +54,21 @@ public class Main {
 			if(input.equalsIgnoreCase("printl")){ dictionary.print(); continue;}
 			if(input.equalsIgnoreCase("printd")){ discussion.print(); continue;}
 			
-			if(input.equalsIgnoreCase("printr")){ responseFlag ^= true; continue;}
+			if(input.equalsIgnoreCase("printr")){ trainingToggle ^= true; continue;}
 			if(input.equalsIgnoreCase("printc")){ printChoice ^= true; continue;}
 			if(input.equalsIgnoreCase("printall")){ fullDebug ^= true; continue;}	
 			
 			if(input.equalsIgnoreCase("exit")){ 
 				
-				convoName = discussion.writeFile(); 
+				//convoName = discussion.writeFile(); 
 				System.out.print("Writing conversation: " + convoName + " ... Done.");
 				break;
 			}
 			
 			/*TRAINING MODE*/
-			if(responseFlag == false){
+			if(trainingToggle == false){
 				
 				next = new Response(last, input, true);
-				//System.out.println(last + " " + next + " " + dictionary.nextEmpty);
 				last = next;
 								
 				if(fullDebug == true){
@@ -77,7 +78,7 @@ public class Main {
 			}
 			
 			/*CONVERSATION MODE*/ 
-			if(responseFlag == true){
+			if(trainingToggle == true){
 				
 				next = new Response(last, input, false);			
 				last = next;	
