@@ -18,63 +18,44 @@ public class Main {
 		boolean printChoice = false;
 		boolean fullDebug = false;
 		
-		/*INITIALIZING RESPONSE VARIABLES*/
-		String input = null;
+		/* INITIALIZING RESPONSE VARIABLES */
+		String input = null, convoName = null;
 		Response last = null, next = null;
 		
-		/*STUFF FOR INITIALIZING MEMORY AND HISTORY*/
+		/* STUFF FOR INITIALIZING MEMORY AND HISTORY */
 		int brainSize = 1000;
 		dictionary = new ResponseList(brainSize);
 		memory = new ResponseMatrix(brainSize);
 		discussion = new Conversation("");
 		
-		dictionary.readFile("list.txt");
-		memory.readFile("matrix.txt");
-				
-		last = dictionary.getResponseAt(0);
-		
-		/*STUFF FOR READING CONSOLE INPUT*/
+		/* RETRIEVE PREVIOUS LIST AND MATRIX AND IMPORT */
+		dictionary.readFile("list.data");
+		memory.readFile("matrix.data");
+					
+		/* STUFF FOR READING CONSOLE INPUT */
 		InputStreamReader sreader = new InputStreamReader(System.in);
 		BufferedReader reader = new BufferedReader(sreader);
 					
-		/*START THE CONVERSATION*/
+		/* START THE CONVERSATION */
+		last = dictionary.getResponseAt(0);
 		System.out.println(last.toString());		
-		while(true){ System.out.print(": ");
+		while(true){ System.out.print("USER->\t");
 					
 			input = reader.readLine();
 			
 			/*DEBUGGING OPTIONS*/
-			if(input.equalsIgnoreCase("printm")){ 
-				memory.print();
-				continue;
-			}
-			if(input.equalsIgnoreCase("printl")){ 
-				dictionary.print();
-				continue;
-			}
-			if(input.equalsIgnoreCase("printr")){ 
-				responseFlag ^= true;
-				continue;
-			}
-			if(input.equalsIgnoreCase("printc")){ 
-				printChoice ^= true;
-				continue;
-			}
-			if(input.equalsIgnoreCase("printd")){ 
-				discussion.print();
-				continue;
-			}		
-			if(input.equalsIgnoreCase("printv")){
-				System.out.println("memory.");
-			}
-			if(input.equalsIgnoreCase("printall")){ 
-				fullDebug ^= true;
-				continue;
-			}	
-			if(input.equalsIgnoreCase("exit")){
+			if(input.equalsIgnoreCase("printm")){ memory.print(); continue;}
+			if(input.equalsIgnoreCase("printl")){ dictionary.print(); continue;}
+			if(input.equalsIgnoreCase("printd")){ discussion.print(); continue;}
+			
+			if(input.equalsIgnoreCase("printr")){ responseFlag ^= true; continue;}
+			if(input.equalsIgnoreCase("printc")){ printChoice ^= true; continue;}
+			if(input.equalsIgnoreCase("printall")){ fullDebug ^= true; continue;}	
+			
+			if(input.equalsIgnoreCase("exit")){ 
 				
-				dictionary.writeFile("list.txt");
-				memory.writeFile("matrix.txt");
+				convoName = discussion.writeFile(); 
+				System.out.print("Writing conversation: " + convoName + " ... Done.");
 				break;
 			}
 			
@@ -98,7 +79,7 @@ public class Main {
 				last = next;	
 				next = memory.getNext(last);// AI ALGORITHM!!
 				last = next;			
-				System.out.println(next.toString());
+				System.out.println("BOT ->\t" + next.toString());
 				
 				if(fullDebug == true){
 					memory.print();
@@ -107,6 +88,9 @@ public class Main {
 				
 				if(printChoice == true) memory.printC();
 			}
+			
+			dictionary.writeFile("list.data");
+			memory.writeFile("matrix.data");
 		}
 		
 		sreader.close();

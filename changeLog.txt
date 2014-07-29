@@ -1,0 +1,6 @@
+CHANGE LOG: TUESDAY, JULY 29, 2014
+                                                                                                                        NOTES
+changing "dimensions" (? why called that?) to "lineToParse"                                                         
+removing Matrix.dimension, used only for printing purposes, so I'll have matrix.print() set it when it's called 
+changing datatype of matrix from int to byte, lots of space to be saved
+main writes the matrix and list to file for every new response                                                          is this a good idea?

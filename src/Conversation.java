@@ -1,47 +1,43 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.Vector;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 
 public class Conversation {
 	
-	String convo= null;
+	private Vector<String> convo;
 	boolean training = false;
 	
-	public Conversation(String first){		
-		convo = first.toString();
+	public Conversation(String first){
+		
+		convo = new Vector<String>(0);
 	}
-	
+
 	public void addNext(Response next){ 
-		convo += "\n" + next.toString(); 
+		convo.add(next.toString()); 
 	}
 	
 	public void addNext(String next){ 
-		convo += "\n" + next; 
+		convo.add(next); 
 	}
 	
 	public void readFile(String matrix, String responses) throws IOException{
 		
-//		String firstLine = null, nextLine = null;
-//		
-//		BufferedReader inFile = new BufferedReader(new FileReader(filename));
-//		firstLine = inFile.readLine();
-//		Response next, last = new Response(firstLine);
-//		
-//		while(inFile.ready()){
-//			
-//			nextLine = inFile.readLine();
-//			next = new Response(last, nextLine, training);
-//			last = next;
-//			addNext(nextLine);			
-//		}
-//		
-//		inFile.close();	
-		
 		String nextLine = null;
+		StringTokenizer lineToParse = null;
 		
 		BufferedReader inFile1 = new BufferedReader(new FileReader(matrix));
 		BufferedReader inFile2 = new BufferedReader(new FileReader(responses));
@@ -51,11 +47,11 @@ public class Conversation {
 		while(inFile1.ready()){
 			
 			nextLine = inFile1.readLine();
-			StringTokenizer dimensions = new StringTokenizer(nextLine, " ");
+			lineToParse = new StringTokenizer(nextLine, " ");
 			
-			while(dimensions.hasMoreTokens()){
+			while(lineToParse.hasMoreTokens()){
 				Main.memory.matrix[rows][cols++] = 
-						Integer.parseInt(dimensions.nextToken());
+						Byte.parseByte(lineToParse.nextToken());
 			}
 			
 			rows++;
@@ -75,124 +71,46 @@ public class Conversation {
 		inFile2.close();
 	}
 	
-	public void writeFile(String matrix, String responses) throws IOException{
+	public String writeFile() throws IOException{
 		
-//		PrintWriter newFile = new PrintWriter(filename);
-//		
-//		StringTokenizer output = new StringTokenizer(convo, "\n");
-//		
-//		while(output.hasMoreElements()) newFile.println(output.nextToken());
-//			
-//		newFile.close();
+		String folderName = "Conversations";
+		Path path = Paths.get("matrix.data");
 		
-		PrintWriter newFile1 = new PrintWriter(matrix);
-		PrintWriter newFile2 = new PrintWriter(responses);
+		File newFolder = new File("Conversations");
+
+//		Files.createDirectories(path.getParent());
 		
-		for(int i=0; i<Main.dictionary.nextEmpty; i++){
-			
-			for(int j=0; j<Main.dictionary.nextEmpty; j++){
-				
-				newFile1.print(Main.memory.matrix[i][j] + " ");
-			}
-			
-			newFile1.println();
+		if(!newFolder.exists()) new File("/" + newFolder).mkdirs();
+		
+		Date date = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss") ;
+	
+		PrintWriter newFile = 
+				new PrintWriter(folderName + "\\" + dateFormat.format(date) + ".txt");
+
+		for(int i=0; i<convo.size(); i++){
+			newFile.println(convo.elementAt(i));
 		}
+					
+		newFile.close();
 		
-		newFile1.close();
-		
-		for(int i=0; i<Main.dictionary.nextEmpty; i++){
-			
-			newFile2.println(Main.dictionary.getResponseAt(i).toString());
-		}
-		
-		newFile2.close();
+		return dateFormat.format(date).toString();
 	}
+	
+//	public static void main(String[] args) throws IOException {
+//        
+//
+//        
+//
+//        try {
+//            Files.createFile(path);
+//        } catch (FileAlreadyExistsException e) {
+//            System.err.println("already exists: " + e.getMessage());
+//        }
+//    }
 	
 	public void print(){ 
 		System.out.println(convo); 
 	}
-
 }
-
-/*
- * Project 3b: 2DArrayInput.cpp
- * by Alex White
- * Prepared for Professor Phillips
- * CS 313, Queens College
- * February 13, 2014
- */
-/* 
-import java.io.*;
-import java.util.*;
-
-public class ReadFileArray {
-
-	public static void main(String[] args) throws IOException, NumberFormatException{
-		
-		String 	filename = "data.txt", 
-				firstLine = null, 
-				nextLine = null; 
-		
-		int rows = 0, cols = 0, i=0, j=0;
-		
-		BufferedReader inFile = new BufferedReader(new FileReader(filename));
-
-		while(inFile.ready()){
-						
-			try{
-			
-			firstLine = inFile.readLine();
-			StringTokenizer dimensions = new StringTokenizer(firstLine, " ");
-			
-			if(dimensions.hasMoreTokens()) 
-				rows = Integer.parseInt(dimensions.nextToken(" "));
-			if(dimensions.hasMoreTokens())
-				cols = Integer.parseInt(dimensions.nextToken(" "));
-			
-			}
-			
-			catch(IOException error){ 
-				
-				System.out.println("An error has occurred");				
-			}
-		}
-		
-		int[][] numbers = new int[rows][cols];
-		for(int k=0; k<rows; k++) numbers[k] = new int[cols];
-				
-		while(inFile.ready()){
-			
-			try{
-				
-				nextLine = inFile.readLine();
-				StringTokenizer arrayLine = new StringTokenizer(nextLine," ");
-				
-				try{
-				
-					while(arrayLine.hasMoreTokens())
-						
-						numbers[i][j++]  = Integer.parseInt(arrayLine.nextToken());				
-				}
-				
-				catch(NumberFormatException error){ continue; }					
-			}
-			
-			catch(IOException error){
-				
-				System.out.println("An error has occurred");
-			}
-			
-			j=0;
-			i++;
-		}
-	
-		for(i=0; i<rows; i++){
-			for(j=0; j<cols; j++)
-				System.out.print(numbers[i][j] + " ");
-			System.out.println();
-		}
-		
-	}	
-}
-*/
 

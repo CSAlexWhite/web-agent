@@ -54,8 +54,9 @@ public class Response {
 		return id;
 	}
 	
-	public boolean equals(Response target){
-		
-		
-	}
+	// TO DO 
+//	public boolean equals(Response target){
+//		
+//		
+//	}
 }
