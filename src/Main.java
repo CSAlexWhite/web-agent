@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+
 public class Main {
 	
 	public static ResponseList dictionary;
@@ -13,6 +15,8 @@ public class Main {
 	public static Conversation discussion;
 			
 	public static void main(String[] args) throws Exception {
+		
+		JFrame mainWindow;
 		
 		boolean responseFlag = false;
 		boolean printChoice = false;
@@ -92,6 +96,12 @@ public class Main {
 			dictionary.writeFile("list.data");
 			memory.writeFile("matrix.data");
 		}
+		
+		mainWindow = new JFrame("\tWebAgent\t");
+	    mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    mainWindow.add(new WebAgentUI());
+	    mainWindow.pack();
+	    mainWindow.setVisible(true);
 		
 		sreader.close();
 		reader.close();

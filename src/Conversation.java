@@ -80,13 +80,13 @@ public class Conversation {
 
 //		Files.createDirectories(path.getParent());
 		
-		if(!newFolder.exists()) new File("/" + newFolder).mkdirs();
+//		if(!newFolder.exists()) new File("/" + newFolder).mkdirs();
 		
 		Date date = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss") ;
 	
 		PrintWriter newFile = 
-				new PrintWriter(folderName + "\\" + dateFormat.format(date) + ".txt");
+				new PrintWriter(dateFormat.format(date) + ".txt");
 
 		for(int i=0; i<convo.size(); i++){
 			newFile.println(convo.elementAt(i));
