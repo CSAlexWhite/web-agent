@@ -19,12 +19,20 @@ public class WebAgentUI extends JPanel implements ActionListener{
 	JTextArea conversationArea;
 	JLabel actionLabel;
 	JTextField inputField;
+	
+	JButton trainingMode;
+	JButton importMode;
 
 	String input;
 	
+	InputListener processor;
+	TrainingToggle mode;
+	
 	public WebAgentUI(){
-		
+				
 		setLayout(new BorderLayout());
+		processor = new InputListener(this);
+		mode = new TrainingToggle();
 		
 		/* NEW ACTION EVENT LABEL (CURRENTLY INACTLIVE) */
 		actionLabel = new JLabel("");
@@ -33,7 +41,7 @@ public class WebAgentUI extends JPanel implements ActionListener{
 		/* INPUT TEXT FIELD, AND ASSOCIATED LABEL FOR THE USER */
 		inputField = new JTextField(10);
 			inputField.setActionCommand("What is this?");
-			inputField.addActionListener(this);		
+			inputField.addActionListener(processor);		
 			
 		JLabel inputFieldLabel = new JLabel("Input: ");
 			inputFieldLabel.setLabelFor(inputField);
@@ -57,9 +65,9 @@ public class WebAgentUI extends JPanel implements ActionListener{
 		    areaScrollPane.getBorder()));
 			
 		/* BUTTONS AND TOGGLES FOR MODES, ETC.*/
-		JButton trainingMode = new JButton("TRAINING MODE");
-			trainingMode.addActionListener(new TrainingToggle());
-		JButton importMode = new JButton("IMPORT MODE");
+		trainingMode = new JButton("USER MODE");
+			trainingMode.addActionListener(mode);
+		importMode = new JButton("IMPORT MODE");
 		
 		/* SET UP THE LEFT SUB-JPANEL */
 		JPanel textControlsPane = new JPanel();				
@@ -102,12 +110,11 @@ public class WebAgentUI extends JPanel implements ActionListener{
         addLabelTextRows(labels, textFields, gridbag, textControlsPane);
 	}
 	
-		
-	@Override
+
 	public void actionPerformed(ActionEvent arg0) {
 		
 		input = this.inputField.getText();
-		 
+	 
 		conversationArea.append(input + "\n");		
 	}
 	

@@ -14,16 +14,15 @@ public class Main {
 	public static Conversation training;
 	public static Conversation discussion;
 	
-	static Boolean trainingToggle = false;		
+	static Boolean trainingToggle = false;
+	static Boolean printChoice = false;
+	static Boolean fullDebug = false;	
+	
+	static JFrame mainWindow;
+	static WebAgentUI mainInterface;
 	
 	public static void main(String[] args) throws Exception {
-		
-		JFrame mainWindow;
-		
-		
-		boolean printChoice = false;
-		boolean fullDebug = false;
-		
+	
 		/* INITIALIZING RESPONSE VARIABLES */
 		String input = null, convoName = null;
 		Response last = null, next = null;
@@ -38,11 +37,13 @@ public class Main {
 		dictionary.readFile("list.data");
 		memory.readFile("matrix.data");
 					
+		launchGUI();
+		
 		/* STUFF FOR READING CONSOLE INPUT */
 		InputStreamReader sreader = new InputStreamReader(System.in);
 		BufferedReader reader = new BufferedReader(sreader);
 					
-		/* START THE CONVERSATION */
+		/* START THE [CONSOLE-BASED] CONVERSATION */
 		last = dictionary.getResponseAt(0);
 		System.out.println(last.toString());		
 		while(true){ System.out.print("USER->\t");
@@ -98,13 +99,23 @@ public class Main {
 			memory.writeFile("matrix.data");
 		}
 		
-		mainWindow = new JFrame("\tWebAgent\t");
-	    mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    mainWindow.add(new WebAgentUI());
-	    mainWindow.pack();
-	    mainWindow.setVisible(true);
-		
 		sreader.close();
 		reader.close();
+	}
+	
+	public void guiAppend(String text){
+		
+		
+	}
+	
+	public static void launchGUI(){
+		
+		mainInterface = new WebAgentUI();
+		
+		mainWindow = new JFrame("\tWebAgent\t");
+	    mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    mainWindow.add(mainInterface);
+	    mainWindow.pack();
+	    mainWindow.setVisible(true);
 	}
 }
