@@ -16,6 +16,8 @@ public class WebAgentUI extends JPanel implements ActionListener{
 	
 	JFrame mainWindow;
 	
+	JMenuBar menuBar;
+	
 	JTextArea mainScreen;
 	JTextArea conversationArea;
 	JLabel actionLabel;
@@ -30,6 +32,10 @@ public class WebAgentUI extends JPanel implements ActionListener{
 	TrainingToggle mode;
 	
 	public WebAgentUI(){
+		
+		mainWindow = Main.mainWindow;
+		menuBar = new JMenuBar();
+		createFileMenu();
 				
 		setLayout(new BorderLayout());
 		processor = new InputListener(this);
@@ -54,13 +60,13 @@ public class WebAgentUI extends JPanel implements ActionListener{
 			conversationArea.setEditable(false);
 			DefaultCaret caret = (DefaultCaret)conversationArea.getCaret();
 			caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-			conversationArea.setText("Bot->\tHi there!\n");
+			conversationArea.setText("BOT->\tHi there!\n");
 		
 		/* SCROLL PANE: THE WRAPPER WITH SCROLL BAR FOR THE CONVERSATION AREA*/
 		JScrollPane areaScrollPane = new JScrollPane(conversationArea);
 			areaScrollPane.setVerticalScrollBarPolicy(
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-			areaScrollPane.setPreferredSize(new Dimension(250, 250));
+			areaScrollPane.setPreferredSize(new Dimension(500, 400));
 			areaScrollPane.setBorder(
 				BorderFactory.createCompoundBorder(
 		                BorderFactory.createCompoundBorder(
@@ -71,7 +77,7 @@ public class WebAgentUI extends JPanel implements ActionListener{
 		/* BUTTONS AND TOGGLES FOR MODES, ETC.*/
 		trainingMode = new JButton("USER MODE");
 			trainingMode.addActionListener(mode);
-		importMode = new JButton("IMPORT MODE");
+		//importMode = new JButton("IMPORT MODE");
 		
 		/* SET UP THE LEFT SUB-JPANEL */
 		JPanel textControlsPane = new JPanel();				
@@ -85,8 +91,8 @@ public class WebAgentUI extends JPanel implements ActionListener{
 	    	textControlsPane.add(actionLabel, gbcons);
 	    	textControlsPane.setBorder(
         		BorderFactory.createCompoundBorder(
-                		BorderFactory.createTitledBorder("Text Fields"),
-                		BorderFactory.createEmptyBorder(5,5,5,5)));
+                		BorderFactory.createTitledBorder(""),
+                		BorderFactory.createEmptyBorder(10, 20, 20, 20)));
 	    	
 	    /* SET UP THE RIGHT SUB-JPANEL */	
 	    	JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
@@ -94,7 +100,7 @@ public class WebAgentUI extends JPanel implements ActionListener{
                     importMode);
 				splitPane.setOneTouchExpandable(false);
 				splitPane.setResizeWeight(0.5);
-				JPanel rightPane = new JPanel(new GridLayout(1,0));
+				JPanel rightPane = new JPanel(new GridLayout(4,0));
 				rightPane.add(splitPane);
 				rightPane.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createTitledBorder("OPTIONS"),
@@ -139,5 +145,25 @@ public class WebAgentUI extends JPanel implements ActionListener{
 				container.add(textFields[i], c);
 			}
     	}
-
+    
+    private void createFileMenu(){
+    	
+    	JMenuItem item;
+    	JMenu fileMenu = new JMenu("FILE");
+    	
+    	FileMenuListener fml = new FileMenuListener(mainWindow);
+    	
+    	item = new JMenuItem("Something");
+    	item.addActionListener(fml);
+    	fileMenu.add(item);
+    	
+    	fileMenu.addSeparator();
+    	
+    	item = new JMenuItem("Quit");
+    	item.addActionListener(fml);
+    	fileMenu.add(item);
+    	
+    	mainWindow.setJMenuBar(menuBar);
+    	menuBar.add(fileMenu);  	
+    }
 }

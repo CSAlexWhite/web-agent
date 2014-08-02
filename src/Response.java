@@ -1,3 +1,4 @@
+import java.util.Vector;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -59,23 +60,43 @@ public class Response {
 		String thatString = target;
 		String thisOutString = "";
 		String thatOutString = "";
+		Vector <String> inWords = new Vector<String>(0);
+		Vector <String> outWords = new Vector<String>(0);
 		
 		Pattern pattern =
-				Pattern.compile("(?i)[^aAeEiIoOuU!?'.,\\s]*(?-i)");
+				//Pattern.compile("(?i)[^aAeEiIoOuU!?'.,\\s]*(?-i)");
+				//Pattern.compile("(?i)[^!?'.,\\s]*(?-i)");
+				Pattern.compile("\\b(?i)[^!?'.,\\s]+(?-i)\\b");
+				//Pattern.compile("\\b(?i)\\w+(?-i)\\b");
 		
 		Matcher thisMatcher = pattern.matcher(thisString);
 		Matcher thatMatcher = pattern.matcher(thatString);
 		
 		while(thisMatcher.find()){
-			thisOutString += thisMatcher.group();		
-		} System.out.println("this: " + thisOutString);
+			inWords.add(thisMatcher.group());
+			//thisOutString += thisMatcher.group();		
+		} for(int i=0; i<inWords.size(); i++) System.out.print(inWords.elementAt(i) + " ");//System.out.println("this: " + thisOutString);
 		
 		while(thatMatcher.find()){
-			thatOutString += thatMatcher.group();			
-		} System.out.println("that: " + thatOutString);
+			outWords.add(thatMatcher.group());
+			//thatOutString += thatMatcher.group();			
+		} //for(int i=0; i<outWords.size(); i++) System.out.print(outWords.elementAt(i) + " ");//System.out.println("that: " + thatOutString);
  
-		if(thisOutString.contains(thatOutString.toLowerCase())) return true;
-		if(thatOutString.contains(thisOutString.toLowerCase())) return true;
+		int match = 0, total = inWords.size() + outWords.size();
+		for(int i=0; i<inWords.size(); i++){
+			
+			for(int j=0; j<outWords.size(); j++){
+				
+				if(inWords.elementAt(i).equalsIgnoreCase(outWords.elementAt(j)))
+					match++;
+			}
+		}
+		
+		System.out.println();
+		//if( (float) match / total > .5) return true; // if more than half the words match, it's a match
+		if( match > 0) return true;
+		//if(thisOutString.contains(thatOutString.toLowerCase())) return true;
+		//if(thatOutString.contains(thisOutString.toLowerCase())) return true;
 		
 		return false;
 	}

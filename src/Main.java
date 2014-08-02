@@ -1,3 +1,4 @@
+import java.awt.GraphicsEnvironment;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -37,7 +38,7 @@ public class Main {
 		dictionary.readFile("list.data");
 		memory.readFile("matrix.data");
 					
-		//launchGUI();
+		launchGUI();
 		
 		/* STUFF FOR READING CONSOLE INPUT */
 		InputStreamReader sreader = new InputStreamReader(System.in);
@@ -113,10 +114,10 @@ public class Main {
 	
 	public static void launchGUI(){
 		
-		mainInterface = new WebAgentUI();
-		
 		mainWindow = new JFrame("\tWebAgent\t");
-		mainWindow.setLocationRelativeTo(null);
+		mainInterface = new WebAgentUI();
+				
+		mainWindow.setLocation(200, 200);
 	    mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    mainWindow.add(mainInterface);
 	    mainWindow.pack();

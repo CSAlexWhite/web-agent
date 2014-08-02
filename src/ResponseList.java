@@ -77,7 +77,7 @@ public class ResponseList {
 			
 		for(int i=0; i<nextEmpty; i++){				// Search for the target
 			//System.out.println(i);
-			if(masterList[i].toString().equalsIgnoreCase(target)){
+			if(masterList[i].equals(target)){
 				repeatID = i;						// where the target is
 				return true;
 			}			

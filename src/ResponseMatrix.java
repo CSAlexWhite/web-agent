@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 /**
@@ -61,23 +62,57 @@ public class ResponseMatrix {
 		
 		dimension = Main.dictionary.nextEmpty - 2;
 		int fromID = from.getID();
-		int toID1 = 0;
-		int readValue = matrix[fromID][0];
+		int toID1, toID2, toID3;
+		int readValue = matrix[fromID][1];
 		
-		while(readValue == 0 && toID1 < dimension){
-			
-			toID1++;
-			readValue = matrix[fromID][toID1];
-		}	
+		Stack <Response> extants = new Stack<Response>();
 		
-		int toID2 = (int)(Math.random()*dimension)-1;
-		if(toID1 >= dimension-1) toID1 = (int)(Math.random()*dimension)-1;
-		System.out.println("ID1 = " + toID1 + " and ID2 = " + toID2);
-		System.out.println("Range = " + dimension);
+		int maxValue = 0;
+		int currentMax = 0;
+		
+//		for(int i=0; i<dimension; i++){ 
+//			if(matrix[fromID][i] > maxValue){ 
+//				maxValue = matrix[fromID][i];
+//				currentMax = i;
+//			}
+//		}
+//	
+//		toID1 = currentMax;
+		
+		for(int i=0; i<dimension; i++){ 
+			if(matrix[fromID][i] > 0){ 
+				extants.push(Main.dictionary.getResponseAt(i));
+			}
+			if(matrix[fromID][i] > maxValue){ 
+				maxValue = matrix[fromID][i];
+				currentMax = i;
+			}
+		}
+		
+		toID1 = currentMax;
+	
+		if(extants.isEmpty()) return new Response("Huh?", 0);
+		
+		return //Main.dictionary.getResponseAt(toID1);
+				extants.elementAt((int)(Math.random()*extants.size()));
+		
+//		toID1 = currentMax;
+		
+//		while(readValue == 0 && toID1 < dimension){
+//			
+//			toID1++;
+//			readValue = matrix[fromID][toID1];
+//		}	
+		
+		//int toID2 = (int)(Math.random()*dimension)-1;
+		//if(toID1 >= dimension) toID1 = (int)(Math.random()*dimension);
+		//System.out.println("ID1 = " + toID1 + " and ID2 = " + toID2);
+		//System.out.println("Range = " + dimension);
 		
 		
-		if((toID1+toID2)%2 == 0) return Main.dictionary.getResponseAt(toID1);
-		else return Main.dictionary.getResponseAt(toID2);		
+		//if((toID1+toID2)%2 == 0) 
+		//	return Main.dictionary.getResponseAt(toID1);
+		//else return Main.dictionary.getResponseAt(toID2);		
 	}
 	
 	/**
