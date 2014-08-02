@@ -37,7 +37,7 @@ public class Main {
 		dictionary.readFile("list.data");
 		memory.readFile("matrix.data");
 					
-		launchGUI();
+		//launchGUI();
 		
 		/* STUFF FOR READING CONSOLE INPUT */
 		InputStreamReader sreader = new InputStreamReader(System.in);
@@ -49,6 +49,12 @@ public class Main {
 		while(true){ System.out.print("USER->\t");
 					
 			input = reader.readLine();
+			Response test1 = dictionary.getResponseAt(1);
+			Response test2 = dictionary.getResponseAt(167);
+			if(test1.equals(test2.toString())) System.out.println("EQUALS!");
+			else System.out.println("NOT EQUALS!");
+			
+			test1.equals(test2);
 			
 			/*DEBUGGING OPTIONS*/
 			if(input.equalsIgnoreCase("printm")){ memory.print(); continue;}
@@ -97,15 +103,12 @@ public class Main {
 			
 			dictionary.writeFile("list.data");
 			memory.writeFile("matrix.data");
+			
 		}
 		
+		discussion.writeFile();
 		sreader.close();
 		reader.close();
-	}
-	
-	public void guiAppend(String text){
-		
-		
 	}
 	
 	public static void launchGUI(){
@@ -113,6 +116,7 @@ public class Main {
 		mainInterface = new WebAgentUI();
 		
 		mainWindow = new JFrame("\tWebAgent\t");
+		mainWindow.setLocationRelativeTo(null);
 	    mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    mainWindow.add(mainInterface);
 	    mainWindow.pack();

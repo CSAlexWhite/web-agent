@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 
 public class WebAgentUI extends JPanel implements ActionListener{
 	
@@ -41,7 +42,7 @@ public class WebAgentUI extends JPanel implements ActionListener{
 		/* INPUT TEXT FIELD, AND ASSOCIATED LABEL FOR THE USER */
 		inputField = new JTextField(10);
 			inputField.setActionCommand("What is this?");
-			inputField.addActionListener(processor);		
+			inputField.addActionListener(processor);	
 			
 		JLabel inputFieldLabel = new JLabel("Input: ");
 			inputFieldLabel.setLabelFor(inputField);
@@ -51,6 +52,9 @@ public class WebAgentUI extends JPanel implements ActionListener{
 			conversationArea.setLineWrap(true);
 			conversationArea.setWrapStyleWord(true);
 			conversationArea.setEditable(false);
+			DefaultCaret caret = (DefaultCaret)conversationArea.getCaret();
+			caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+			conversationArea.setText("Bot->\tHi there!\n");
 		
 		/* SCROLL PANE: THE WRAPPER WITH SCROLL BAR FOR THE CONVERSATION AREA*/
 		JScrollPane areaScrollPane = new JScrollPane(conversationArea);
@@ -84,7 +88,7 @@ public class WebAgentUI extends JPanel implements ActionListener{
                 		BorderFactory.createTitledBorder("Text Fields"),
                 		BorderFactory.createEmptyBorder(5,5,5,5)));
 	    	
-	    /* SET UP THE LEFT (CURRENTLY INACTIVE) SUB-JPANEL */	
+	    /* SET UP THE RIGHT SUB-JPANEL */	
 	    	JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                     trainingMode,
                     importMode);
@@ -113,8 +117,7 @@ public class WebAgentUI extends JPanel implements ActionListener{
 
 	public void actionPerformed(ActionEvent arg0) {
 		
-		input = this.inputField.getText();
-	 
+		input = this.inputField.getText(); 
 		conversationArea.append(input + "\n");		
 	}
 	
@@ -126,12 +129,11 @@ public class WebAgentUI extends JPanel implements ActionListener{
 			int numLabels = labels.length;
 			
 			for (int i = 0; i < numLabels; i++) {
-				c.gridwidth = GridBagConstraints.RELATIVE; //next-to-last
-				c.fill = GridBagConstraints.NONE;      //reset to default
-				c.weightx = 0.0;                       //reset to default
+				c.gridwidth = GridBagConstraints.RELATIVE; 
+				c.fill = GridBagConstraints.NONE;      
 				container.add(labels[i], c);
 				
-				c.gridwidth = GridBagConstraints.REMAINDER;     //end row
+				c.gridwidth = GridBagConstraints.REMAINDER;     
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.weightx = 1.0;
 				container.add(textFields[i], c);

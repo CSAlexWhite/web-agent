@@ -59,18 +59,25 @@ public class ResponseMatrix {
 	 */
 	public Response getNext(Response from){
 		
-		dimension = Main.dictionary.nextEmpty;
+		dimension = Main.dictionary.nextEmpty - 2;
 		int fromID = from.getID();
-		int toID = 0;
+		int toID1 = 0;
 		int readValue = matrix[fromID][0];
 		
-		while(readValue == 0){
+		while(readValue == 0 && toID1 < dimension){
 			
-			toID++;
-			readValue = matrix[fromID][toID];
-		}		
+			toID1++;
+			readValue = matrix[fromID][toID1];
+		}	
 		
-		return Main.dictionary.getResponseAt(toID);
+		int toID2 = (int)(Math.random()*dimension)-1;
+		if(toID1 >= dimension-1) toID1 = (int)(Math.random()*dimension)-1;
+		System.out.println("ID1 = " + toID1 + " and ID2 = " + toID2);
+		System.out.println("Range = " + dimension);
+		
+		
+		if((toID1+toID2)%2 == 0) return Main.dictionary.getResponseAt(toID1);
+		else return Main.dictionary.getResponseAt(toID2);		
 	}
 	
 	/**
@@ -92,8 +99,7 @@ public class ResponseMatrix {
 			lineToParse = new StringTokenizer(nextLine, " ");
 			
 			for(int j=0; j<readSize; j++)
-				matrix[i][j] = Byte.parseByte(lineToParse.nextToken());
-			
+				matrix[i][j] = Byte.parseByte(lineToParse.nextToken());		
 		}
 		
 		inFile.close();		

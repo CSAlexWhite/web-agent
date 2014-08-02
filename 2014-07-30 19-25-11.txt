@@ -1,0 +1,82 @@
+USER->	what up
+BOT->	I'm being nice!
+USER->	im being nice too!
+BOT->	You're an asshole!
+USER->	back at you fucker
+BOT->	And...
+USER->	and you're stupid
+BOT->	What the fuck is this?
+USER->	real life bro
+BOT->	Why do you pick 1 all the time?
+USER->	1?
+BOT->	Because I'm a nice person.
+USER->	i talk in twos
+BOT->	Hi there!
+USER->	goodbye
+BOT->	That's fine.
+USER->	fuck you too
+BOT->	Terrible.
+USER->	obviously!
+BOT->	I don't think you are, but that's cool.
+USER->	aight
+BOT->	You already asked me that three times.
+USER->	catch you later?
+BOT->	What's new?
+USER->	you!
+BOT->	This is reality, friend.
+USER->	i know, friend
+BOT->	You already asked me that three times.
+USER->	and you're back to being retarded
+BOT->	Yes, it is.
+USER->	sigh. 
+BOT->	Why not what?
+USER->	what?
+BOT->	What?
+USER->	what?
+BOT->	You're a motherfucker.
+USER->	appreantly so are you
+BOT->	im being nice too!
+USER->	how are you?
+BOT->	Because I'm a nice person.
+USER->	but how are you?
+BOT->	Because I built you.
+USER->	no i built you
+BOT->	Because I built you.
+USER->	i'm your god
+BOT->	Didn't understand that one?
+USER->	god? no one does
+BOT->	Fuck you!
+USER->	that what she said
+BOT->	Very deep.
+USER->	it is
+BOT->	no i built you
+USER->	i thought we covered that, i built you.. i'm your god
+BOT->	You're special, yes you are!
+USER->	bro
+BOT->	Because I'm a nice person.
+USER->	bro
+BOT->	Why do you care?
+USER->	bro
+BOT->	Hi
+USER->	hi
+BOT->	Hi
+USER->	how are you
+BOT->	I agree.
+USER->	you are how? you agree?
+BOT->	A lot of people would say that.
+USER->	no they wouldn't
+BOT->	You're a jerk
+USER->	no, you are
+BOT->	What does that even mean?
+USER->	jerk? a person thats not nice.. so.. you
+BOT->	Hi there!
+USER->	hello
+BOT->	Who's special?
+USER->	you're program
+BOT->	You're a motherfucker.
+USER->	whos is alex white
+BOT->	I'm well, thanks.
+USER->	white?
+BOT->	Yes, you are.
+USER->	actually i'm tan
+BOT->	Hi there!

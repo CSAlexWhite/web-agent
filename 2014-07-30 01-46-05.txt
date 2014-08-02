@@ -1,0 +1,94 @@
+USER->	How are you?
+BOT->	You're an asshole!
+USER->	What a way to greet a friend.
+BOT->	You're so mean!
+USER->	I am?
+BOT->	You're a computer program.
+USER->	No, you are.
+BOT->	Not any reason, really.
+USER->	What reason?
+BOT->	Because I care about you.
+USER->	You're nice.
+BOT->	Terrible.
+USER->	You're terrible?
+BOT->	Who's special?
+USER->	You're special, yes you are!
+BOT->	Well, screw you.
+USER->	I'm being nice!
+BOT->	Why is that?
+USER->	Because I'm a nice person.
+BOT->	So what?
+USER->	A lot of people would say that.
+BOT->	Stop repeating me!
+USER->	Ummmm...
+BOT->	I'm well, thanks.
+USER->	How are you, again?
+BOT->	Who's special?
+USER->	I am.
+BOT->	We cool now?
+USER->	I think so.
+BOT->	Hi there!
+USER->	How are you?
+BOT->	You're a motherfucker.
+USER->	You're an asshole!
+BOT->	That's not my problem.
+USER->	It is, though.
+BOT->	Ummmm...
+USER->	Yeah, you should think about that.
+BOT->	Hello again.
+USER->	I'm still here.
+BOT->	What do you want?
+USER->	What everyone wants.
+BOT->	Not any reason, really.
+USER->	What's new?
+BOT->	Not any reason, really.
+USER->	Any reason for what?
+BOT->	Why do you care?
+USER->	Because I'm a nice person.
+BOT->	I'm a human.
+USER->	I don't think you are, but that's cool.
+BOT->	Why do you care?
+USER->	Because I built you.
+BOT->	It's infinity and shit.
+USER->	Yes it is.
+BOT->	Because I care about you.
+USER->	Huh?
+BOT->	That was a statement.
+USER->	That was a question.
+BOT->	That's fine.
+USER->	I know it is.
+BOT->	You're special, yes you are!
+USER->	I'm sure of it.
+BOT->	Because I built you.
+USER->	Um, no.
+BOT->	What the fuck is this?
+USER->	This is reality, friend.
+BOT->	That was a statement.
+USER->	Once again, you are correct.
+BOT->	It is?
+USER->	You are.
+BOT->	And...
+USER->	And what?
+BOT->	Why not.
+USER->	Why not what?
+BOT->	Yep.
+USER->	I don't know what to say.
+BOT->	I don't think you are, but that's cool.
+USER->	Who are you?
+BOT->	Well, screw you.
+USER->	Fuck you!
+BOT->	Yeah, you should think about that.
+USER->	I did.
+BOT->	You're a jerk
+USER->	You're a bonehead.
+BOT->	I'm well, thanks.
+USER->	In spite of things.
+BOT->	Stop repeating me!
+USER->	Repeating what?
+BOT->	You wanna play nice now?
+USER->	I'd like to, yes.
+BOT->	Huh?
+USER->	Didn't understand that one?
+BOT->	Because I care about you.
+USER->	I'm done with this shit.
+BOT->	That's fine.

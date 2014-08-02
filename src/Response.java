@@ -1,3 +1,6 @@
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 /**
  * An object which holds response content plus a vector of responses which 
  * have been next in the past, which expands if new responses occur
@@ -19,11 +22,7 @@ public class Response {
 	 * @param training
 	 */
 	public Response(Response last, String input, boolean training){
-		
-		//if(training) Main.training.addNext(input);
-		//if(!training) 
-		Main.discussion.addNext(input);	// adds the content to the discussion
-					
+			
 		// looks for the Response already, if there, overwrite it. 
 		if(Main.dictionary.findResponse(input)){
 			id = Main.dictionary.repeatID;
@@ -54,9 +53,30 @@ public class Response {
 		return id;
 	}
 	
-	// TO DO 
-//	public boolean equals(Response target){
-//		
-//		
-//	}
+	public boolean equals(String target){
+		
+		String thisString = content;
+		String thatString = target;
+		String thisOutString = "";
+		String thatOutString = "";
+		
+		Pattern pattern =
+				Pattern.compile("(?i)[^aAeEiIoOuU!?'.,\\s]*(?-i)");
+		
+		Matcher thisMatcher = pattern.matcher(thisString);
+		Matcher thatMatcher = pattern.matcher(thatString);
+		
+		while(thisMatcher.find()){
+			thisOutString += thisMatcher.group();		
+		} System.out.println("this: " + thisOutString);
+		
+		while(thatMatcher.find()){
+			thatOutString += thatMatcher.group();			
+		} System.out.println("that: " + thatOutString);
+ 
+		if(thisOutString.contains(thatOutString.toLowerCase())) return true;
+		if(thatOutString.contains(thisOutString.toLowerCase())) return true;
+		
+		return false;
+	}
 }

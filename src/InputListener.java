@@ -34,12 +34,16 @@ public class InputListener implements ActionListener{
 	public void actionPerformed(ActionEvent e){
 		
 		input = mainUI.inputField.getText();
+		if(input.equalsIgnoreCase("print")){ 
+			try {discussion.writeFile();} catch (IOException e1) {input = null; return;}
+		}
 		mainUI.inputField.setText("");
 		mainUI.conversationArea.append("USER->\t" + input + "\n");
 		
 		/*TRAINING MODE*/
 		if(trainingToggle == false){
 			
+			Main.discussion.addNext(input);	
 			next = new Response(last, input, true);
 			last = next;
 							
@@ -52,12 +56,14 @@ public class InputListener implements ActionListener{
 		/*CONVERSATION MODE*/ 
 		if(trainingToggle == true){
 			
+			Main.discussion.addNext("USER->\t" + input);	
 			next = new Response(last, input, false);			
 			last = next;	
-			next = memory.getNext(last);// AI ALGORITHM!!
+			next = memory.getNext(last);// AI ALGORITHM!!	
 			last = next;
 			
-			new Thread(new BotResponse(next.toString())).start();
+			Main.discussion.addNext("BOT->\t" + next.toString());	// adds the content to the discussion
+			new Thread(new BotResponse(last.toString())).start();
 			
 			if(Main.fullDebug == true){
 				memory.print();

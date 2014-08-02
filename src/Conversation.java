@@ -14,8 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
-
 public class Conversation {
 	
 	private Vector<String> convo;
@@ -73,10 +71,10 @@ public class Conversation {
 	
 	public String writeFile() throws IOException{
 		
-		String folderName = "Conversations";
-		Path path = Paths.get("matrix.data");
-		
-		File newFolder = new File("Conversations");
+//		String folderName = "Conversations";
+//		Path path = Paths.get("matrix.data");
+//		
+//		File newFolder = new File("Conversations");
 
 //		Files.createDirectories(path.getParent());
 		
@@ -96,18 +94,6 @@ public class Conversation {
 		
 		return dateFormat.format(date).toString();
 	}
-	
-//	public static void main(String[] args) throws IOException {
-//        
-//
-//        
-//
-//        try {
-//            Files.createFile(path);
-//        } catch (FileAlreadyExistsException e) {
-//            System.err.println("already exists: " + e.getMessage());
-//        }
-//    }
 	
 	public void print(){ 
 		System.out.println(convo); 
