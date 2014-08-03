@@ -1,0 +1,18 @@
+USER->	hello
+BOT->	I'm still here.
+USER->	how are you?
+BOT->	Terrible.
+USER->	really?
+BOT->	What is wrong?
+USER->	nothing
+BOT->	Huh?
+USER->	What.
+BOT->	Nothing much.
+USER->	How are you?
+BOT->	Yo
+USER->	what's new?
+BOT->	That's good.
+USER->	what's good?
+BOT->	How are you?
+USER->	I'm great!
+BOT->	That's good.

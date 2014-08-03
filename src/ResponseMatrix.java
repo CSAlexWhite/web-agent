@@ -79,9 +79,12 @@ public class ResponseMatrix {
 //	
 //		toID1 = currentMax;
 		
+		int notZeros = 0;
 		for(int i=0; i<dimension; i++){ 
 			if(matrix[fromID][i] > 0){ 
+				notZeros++;
 				extants.push(Main.dictionary.getResponseAt(i));
+				System.out.print(Main.dictionary.getResponseAt(i) + " OR ");
 			}
 			if(matrix[fromID][i] > maxValue){ 
 				maxValue = matrix[fromID][i];
@@ -90,11 +93,14 @@ public class ResponseMatrix {
 		}
 		
 		toID1 = currentMax;
-	
+		System.out.print("\nMax is: " + Main.dictionary.getResponseAt(toID1) + "\n");
 		if(extants.isEmpty()) return new Response("Huh?", 0);
 		
-		return //Main.dictionary.getResponseAt(toID1);
-				extants.elementAt((int)(Math.random()*extants.size()));
+		int test = (int)(Math.random()*100);
+		
+		if(maxValue > notZeros) return Main.dictionary.getResponseAt(toID1);
+		if(test%3==0 || test%3==2) return Main.dictionary.getResponseAt(toID1);
+		else return extants.elementAt((int)(Math.random()*extants.size()));
 		
 //		toID1 = currentMax;
 		

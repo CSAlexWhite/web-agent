@@ -18,6 +18,7 @@ public class Conversation {
 	
 	private Vector<String> convo;
 	boolean training = false;
+	Response last, next;
 	
 	public Conversation(String first){
 		
@@ -32,53 +33,31 @@ public class Conversation {
 		convo.add(next); 
 	}
 	
-	public void readFile(String matrix, String responses) throws IOException{
+	public void readFile(File file) throws IOException{
 		
+		String line2;
+		int linecount = 0;
+		last = Main.dictionary.getResponseAt(0);
 		String nextLine = null;
-		StringTokenizer lineToParse = null;
-		
-		BufferedReader inFile1 = new BufferedReader(new FileReader(matrix));
-		BufferedReader inFile2 = new BufferedReader(new FileReader(responses));
-		
-		int rows = 0, cols = 0;
-		
-		while(inFile1.ready()){
-			
-			nextLine = inFile1.readLine();
-			lineToParse = new StringTokenizer(nextLine, " ");
-			
-			while(lineToParse.hasMoreTokens()){
-				Main.memory.matrix[rows][cols++] = 
-						Byte.parseByte(lineToParse.nextToken());
-			}
-			
-			rows++;
-			Main.dictionary.nextEmpty++;
-			Main.memory.dimension++;
+		System.out.println(file.getAbsolutePath());
+		BufferedReader inFile = new BufferedReader(new FileReader(file.getAbsolutePath()));
+
+		while(inFile.ready()){
+						
+			nextLine = inFile.readLine().
+					replaceFirst("(^[^:>-]+[:>-]+\\s?)|(\\((.*?)\\))","");
+			if(isBlank(nextLine)) continue;
+			next = new Response(last, nextLine, true);
+			last = next;
+			linecount++;
+			if(linecount%43 == 0) System.out.println("Importing " + linecount);
 		}	
 		
-		inFile1.close();		
-		
-		int lineNum = 0;
-		while(inFile2.ready()){
-			
-			nextLine = inFile2.readLine();
-			Main.dictionary.add(nextLine, lineNum);
-		}
-		
-		inFile2.close();
+		System.out.println("Done");
+		inFile.close();		
 	}
 	
 	public String writeFile() throws IOException{
-		
-//		String folderName = "Conversations";
-//		Path path = Paths.get("matrix.data");
-//		
-//		File newFolder = new File("Conversations");
-
-//		Files.createDirectories(path.getParent());
-		
-//		if(!newFolder.exists()) new File("/" + newFolder).mkdirs();
 		
 		Date date = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss") ;
@@ -93,6 +72,20 @@ public class Conversation {
 		newFile.close();
 		
 		return dateFormat.format(date).toString();
+	}
+	
+	public static boolean isBlank(String str) {
+		
+	    int length;
+	    if (str == null || (length = str.length()) == 0) {
+	        return true;
+	    }
+	    for (int i = 0; i < length; i++) {
+	        if ((Character.isWhitespace(str.charAt(i)) == false)) {
+	            return false;
+	        }
+	    }
+	    return true;
 	}
 	
 	public void print(){ 

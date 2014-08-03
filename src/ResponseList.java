@@ -28,9 +28,9 @@ public class ResponseList {
 	 * for the directed graph;
 	 * @param newResponse
 	 */
-	public void add(Response last, Response newResponse){
+	public void add(Response last, Response newResponse, float sensitivity){
 		
-		if(findResponse(newResponse.toString())){ 	// if the response is already there
+		if(findResponse(newResponse.toString(), sensitivity)){ 	// if the response is already there
 			
 			Main.memory.addEdge(last, Main.dictionary.getResponseAt(repeatID)); // increment the edge between
 			return;											// current and the repeat
@@ -49,6 +49,12 @@ public class ResponseList {
 	public void add(String input, int id){
 		
 		masterList[id] = new Response(input, id);
+	}
+	
+	public void add(String input){
+		
+		masterList[nextEmpty] = new Response(input, nextEmpty);
+		nextEmpty++;
 	}
 	
 	/**
@@ -71,14 +77,16 @@ public class ResponseList {
 	 * @param target
 	 * @return
 	 */
-	public Boolean findResponse(String target){
+	public Boolean findResponse(String target, float sensitivity){
 		
 		//System.out.println("findResponse : " + nextEmpty);
 			
-		for(int i=0; i<nextEmpty; i++){				// Search for the target
+		for(int i=0; i<nextEmpty*10; i++){				// Search for the target
 			//System.out.println(i);
-			if(masterList[i].equals(target)){
-				repeatID = i;						// where the target is
+			int j = (int)(Math.random()*nextEmpty);
+			if(masterList[j].equals(target) >= sensitivity){
+				repeatID = j;	// where the target is
+				//System.out.println("Match is: " + masterList[repeatID]);
 				return true;
 			}			
 		}

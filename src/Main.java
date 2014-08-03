@@ -29,7 +29,7 @@ public class Main {
 		Response last = null, next = null;
 		
 		/* STUFF FOR INITIALIZING MEMORY AND HISTORY */
-		int brainSize = 1000;
+		int brainSize = 10000;
 		dictionary = new ResponseList(brainSize);
 		memory = new ResponseMatrix(brainSize);
 		discussion = new Conversation("");
@@ -52,8 +52,8 @@ public class Main {
 			input = reader.readLine();
 			Response test1 = dictionary.getResponseAt(1);
 			Response test2 = dictionary.getResponseAt(167);
-			if(test1.equals(test2.toString())) System.out.println("EQUALS!");
-			else System.out.println("NOT EQUALS!");
+			//if(test1.equals(test2.toString())) System.out.println("EQUALS!");
+			//else System.out.println("NOT EQUALS!");
 			
 			test1.equals(test2);
 			

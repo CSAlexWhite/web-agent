@@ -56,6 +56,7 @@ public class WebAgentUI extends JPanel implements ActionListener{
 		/* CONVERSATION AREA WHICH OUTPUTS USER AND BOT RESPONSES */
 		conversationArea = new JTextArea();
 			conversationArea.setLineWrap(true);
+			conversationArea.setFont(new Font("Consolas", Font.TRUETYPE_FONT, 16));
 			conversationArea.setWrapStyleWord(true);
 			conversationArea.setEditable(false);
 			DefaultCaret caret = (DefaultCaret)conversationArea.getCaret();
@@ -151,9 +152,17 @@ public class WebAgentUI extends JPanel implements ActionListener{
     	JMenuItem item;
     	JMenu fileMenu = new JMenu("FILE");
     	
-    	FileMenuListener fml = new FileMenuListener(mainWindow);
+    	FileMenuListener fml = new FileMenuListener(this, mainWindow);
     	
-    	item = new JMenuItem("Something");
+    	fileMenu.addSeparator();
+    	
+    	item = new JMenuItem("Print Conversation");
+    	item.addActionListener(fml);
+    	fileMenu.add(item);
+    	
+    	fileMenu.addSeparator();
+    	
+    	item = new JMenuItem("Import Conversation");
     	item.addActionListener(fml);
     	fileMenu.add(item);
     	

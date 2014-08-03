@@ -13,6 +13,8 @@ public class Response {
 
 	private String content;		// the content of this response
 	private int id;				// the primary key of this response
+	final float highSensitivity = (float).9;
+	final float lowSensitivity = (float).05;
 	
 	/**
 	 * A new response from the user, when created its content is set and it
@@ -24,18 +26,37 @@ public class Response {
 	 */
 	public Response(Response last, String input, boolean training){
 			
-		// looks for the Response already, if there, overwrite it. 
-		if(Main.dictionary.findResponse(input)){
-			id = Main.dictionary.repeatID;
-			Main.memory.addEdge(last.getID(),id);
+		if(training){
+			
+			// looks for the Response already, if there, overwrite it. 
+			if(Main.dictionary.findResponse(input, highSensitivity)){
+				id = Main.dictionary.repeatID;
+				Main.memory.addEdge(last.getID(),id);
+			}
+			
+			// otherwise assigns it a unique id
+			else{ 	id = Main.dictionary.getSize(); content = input;		
+					Main.dictionary.add(last, this, highSensitivity); // adds this to the list of responses
+			}
+			
+			Main.memory.dimension = Main.dictionary.nextEmpty;	
 		}
 		
-		// otherwise assigns it a unique id
-		else{ 	id = Main.dictionary.getSize(); content = input;		
-				Main.dictionary.add(last, this); // adds this to the list of responses
+		else{ 
+			// looks for the Response already, if there, overwrite it. 
+			if(Main.dictionary.findResponse(input, lowSensitivity)){
+				id = Main.dictionary.repeatID;
+				Main.memory.addEdge(last.getID(),id);
+			}
+			
+			// otherwise assigns it a unique id
+			else{ 	id = Main.dictionary.getSize(); content = input;		
+					Main.dictionary.add(last, this, lowSensitivity); // adds this to the list of responses
+			}
+			
+			Main.memory.dimension = Main.dictionary.nextEmpty;	
 		}
-		
-		Main.memory.dimension = Main.dictionary.nextEmpty;		
+			
 	}
 	
 	public Response(String input, int idNum){
@@ -54,7 +75,7 @@ public class Response {
 		return id;
 	}
 	
-	public boolean equals(String target){
+	public float equals(String target){
 		
 		String thisString = content;
 		String thatString = target;
@@ -75,7 +96,7 @@ public class Response {
 		while(thisMatcher.find()){
 			inWords.add(thisMatcher.group());
 			//thisOutString += thisMatcher.group();		
-		} for(int i=0; i<inWords.size(); i++) System.out.print(inWords.elementAt(i) + " ");//System.out.println("this: " + thisOutString);
+		} //for(int i=0; i<inWords.size(); i++) System.out.print(inWords.elementAt(i) + " ");//System.out.println("this: " + thisOutString);
 		
 		while(thatMatcher.find()){
 			outWords.add(thatMatcher.group());
@@ -92,12 +113,16 @@ public class Response {
 			}
 		}
 		
-		System.out.println();
+		//System.out.println();	
+		if(total==0) return total;
+		float hitrate = (float) match/total;
+		//if(hitrate>0) System.out.println(hitrate*100 + "%");
+		return hitrate;
 		//if( (float) match / total > .5) return true; // if more than half the words match, it's a match
-		if( match > 0) return true;
+		//if( match > 0) return true;
 		//if(thisOutString.contains(thatOutString.toLowerCase())) return true;
 		//if(thatOutString.contains(thisOutString.toLowerCase())) return true;
 		
-		return false;
+		//return false;
 	}
 }
