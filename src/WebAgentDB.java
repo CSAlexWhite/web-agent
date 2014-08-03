@@ -1,4 +1,8 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public abstract class WebAgentDB{
   
@@ -13,44 +17,30 @@ public abstract class WebAgentDB{
 		catch (SQLException se){System.out.println("Could not connect to database");}
 		statement = connection.createStatement();	
 		
-		try{instruct( "CREATE DATABASE WEBAGENT");}
-		catch(SQLException se){
-			instruct("USE WEBAGENT");
-		}
+		instruct( "CREATE DATABASE WEBAGENT");
 		
-		try{instruct("USE WEBAGENT");}
-		catch(SQLException se){
-			instruct("CREATE DATABASE WEBAGENT");
-			instruct("USE WEBAGENT");
-		}
+		instruct("USE WEBAGENT");
 		
-		try{	instruct( "CREATE TABLE CONVERSATIONS"
-				+ "(id INTEGER not NULL AUTO_INCREMENT,"
-				+ "responseid INTEGER NOT NULL,"
-				+ "user BOOLEAN,"
-				+ "previous INTEGER,"
-				+ "PRIMARY KEY (id))");	
-			} catch(SQLException se)
-		{System.out.println("Table CONVERSATIONS exists");}
+		instruct( "CREATE TABLE CONVERSATIONS"
+				+ "(ID INTEGER not NULL AUTO_INCREMENT,"
+				+ "rID INTEGER NOT NULL,"
+				+ "USER BOOLEAN,"
+				+ "lastID INTEGER,"
+				+ "PRIMARY KEY (ID))");
 				
 		
-		try{	instruct( 
+		instruct( 
 				"CREATE TABLE DICTIONARY " +
-                "(id INTEGER not NULL AUTO_INCREMENT, " +
-                " length INTEGER not NULL, " + 
-                " content VARCHAR(8192) NOT NULL, " + 
-                " PRIMARY KEY ( id ))"); 
-		} catch(SQLException se)
-		{
-			System.out.println("Table CONVERSATIONS exists");
-			instruct("TRUNCATE TABLE DICTIONARY");
-			}
+                "(rID INTEGER not NULL AUTO_INCREMENT, " +
+                " LENGTH INTEGER not NULL, " + 
+                " CONTENT VARCHAR(8192) NOT NULL, " + 
+                " PRIMARY KEY ( rID ))");
 	}
 	
-	public static void instruct(String inputStatement) throws SQLException{
+	public static void instruct(String inputStatement){
 		 
 		String sql = inputStatement;
-		statement = connection.createStatement();
+		try {statement = connection.createStatement();} catch (SQLException e) {e.printStackTrace();}
 		try{statement.executeUpdate(sql);} 
 		catch(SQLException se){ /*se.printStackTrace();*/}		
 	}
@@ -58,14 +48,13 @@ public abstract class WebAgentDB{
 	public static void addToConvoDB(Integer id, Boolean user, Integer previousID){
 		
 		try{
-			statement.executeUpdate( 
-				"INSERT INTO Conversations (responseid, user, previous)"
-				+ " VALUE ("
-				+ id.toString()			+ "," 
-				+ user.toString() 		+ ","
-				+ previousID.toString() + ")"
-				);
-		}catch (SQLException se){se.printStackTrace();}
+			String sql= "INSERT INTO conversations(rID, USER, lastID) VALUES(?, ?, ?)";
+			PreparedStatement prepared = connection.prepareStatement(sql);
+			prepared.setInt(1, id);
+			prepared.setBoolean(2, user);
+			prepared.setInt(3, previousID);
+			int val = prepared.executeUpdate();
+			} catch (SQLException se){se.printStackTrace();}
 				
 	}
 	
@@ -73,16 +62,63 @@ public abstract class WebAgentDB{
 	public static void addToDictDB(Integer length, String content){
 		
 		
-		
 		try{
-			errorcount++;
-			statement.executeUpdate( 
-					"INSERT INTO `dictionary`(length, content) VALUE ('"+length.toString()+"','"+content+"');");
-				//"INSERT INTO Dictionary (length, content) VALUES (" + length.toString()	+ "," + content + ")");
-//				"INSERT INTO Dictionary (length, content) VALUE (" + length.toString() + "," + content + ")");//1, 2)");
-//			('"+pid+"','"+tid+"','"+rid+"',"+tspent+",'"+des+"');"
-		} catch (SQLException se){System.out.println(errorcount);se.printStackTrace();}
+			String sql= "INSERT INTO dictionary(LENGTH, CONTENT) VALUES(?, ?)";
+			PreparedStatement prepared = connection.prepareStatement(sql);
+			prepared.setInt(1, length);
+			prepared.setString(2, content);
+			int val = prepared.executeUpdate();
+		} catch (SQLException se){se.printStackTrace();}
 				
+	}
+	
+	public static ResultSet queryDB(String query) throws SQLException{
+		
+		ResultSet output = statement.executeQuery(query);
+		ResultSetMetaData metaData = output.getMetaData();
+		
+		for(int i=1; i<=metaData.getColumnCount(); i++){
+			System.out.print(metaData.getColumnName(i) + "\t");
+		}
+		
+		System.out.println();
+		
+		while(output.next()){
+			
+			for(int i=1; i<=metaData.getColumnCount(); i++){
+				System.out.print(output.getString(i) + "\t");
+			}
+			System.out.println();
+		}
+		
+		System.out.println();
+		
+		return output;
+	}
+	
+	public static void rsToFile(ResultSet toOutput, String filename) throws FileNotFoundException, SQLException{
+	
+		PrintWriter newFile = 
+				new PrintWriter(filename + ".txt");
+		
+		ResultSetMetaData metaData = toOutput.getMetaData();
+		
+		for(int i=1; i<=metaData.getColumnCount(); i++){
+			newFile.print(metaData.getColumnName(i) + "\t");
+		}
+		
+		System.out.println();
+		
+		while(toOutput.next()){
+			
+			for(int i=1; i<=metaData.getColumnCount(); i++){
+				newFile.print(toOutput.getString(i) + "\t");
+			}
+			
+			newFile.println();
+		}
+					
+		newFile.close();
 	}
 	
 	public static int count(){

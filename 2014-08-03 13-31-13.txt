@@ -1,0 +1,24 @@
+USER->	How goes it?
+BOT->	Yes, yes, yes.
+USER->	What?
+BOT->	That's good.
+USER->	What's new homie?
+BOT->	You wanted me? 
+USER->	I did.
+BOT->	That was hilarious, by the way.
+USER->	What was?
+BOT->	You were going with him then. 
+USER->	I was?
+BOT->	That's what Oprah likes. 
+USER->	Sounds like she likes some interesting things.
+BOT->	You were going with him then. 
+USER->	What do you mean by that?
+BOT->	You agree that women are the masters of manipulation, Chelsea? 
+USER->	My name is not Chelsea..
+BOT->	I do. I really like him. 
+USER->	That's good.
+BOT->	How funny is he in the house? 
+USER->	Who?
+BOT->	Chicago Condors. It was the ABL. 
+USER->	That's a very interesting statement.
+BOT->	The worst, I do write about this guy called the Teletubby. I dated this Teletubby. 

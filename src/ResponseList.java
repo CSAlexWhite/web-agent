@@ -126,10 +126,13 @@ public class ResponseList {
 	
 	public void readFile(String filename) throws IOException{
 		
-		System.out.print("IMPORTING DICTIONARY ...");
+		WebAgentDB.instruct("TRUNCATE TABLE dictionary");
+		
+		System.out.print("IMPORTING DICTIONARY ...\n");
 		String nextLine = null;	
 		BufferedReader inFile = new BufferedReader(new FileReader(filename));
 		
+		System.out.print("UPDATING DATABASE ...\t");
 		int lineNum = 0;
 		while(inFile.ready()){
 			
@@ -141,7 +144,6 @@ public class ResponseList {
 		}
 		
 		System.out.println("\t" + lineNum + " responses.");
-		//buildDictDB();
 		inFile.close();
 	}
 	

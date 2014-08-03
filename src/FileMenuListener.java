@@ -43,6 +43,8 @@ public class FileMenuListener  implements ActionListener{
 		if(menuName.equals("Quit")){
 			
 			mainFrame.dispose();
+			try {WebAgentDB.disconnect();} 
+			catch (Exception e1) {e1.printStackTrace();}
 			System.exit(0);
 		}
 	}

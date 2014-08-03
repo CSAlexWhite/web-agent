@@ -1,4 +1,6 @@
 import java.io.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JFrame;
 
@@ -30,9 +32,8 @@ public class Main {
 		dictionary.readFile("list.data");
 		memory.readFile("matrix.data");
 					
-		System.out.println("LAUNCHING USER INTERFACE ...");
-		launchGUI();	
-		WebAgentDB.disconnect();	
+		System.out.println("LAUNCHING GRAPHICAL INTERFACE ...");
+		launchGUI();		
 	}
 	
 	public static void launchConsole() throws IOException{
@@ -47,7 +48,8 @@ public class Main {
 					
 		/* START THE [CONSOLE-BASED] CONVERSATION */
 		last = dictionary.getResponseAt(0);
-		System.out.println("\t*****************************************");
+		System.out.println("LAUNCHING CONSOLE INTERFACE...");
+		System.out.println("\n\t*****************************************");
 		System.out.println("\t|   Welcome to the WebAgent console. \t|\n\t| "
 							  + "Press help at any time to receive it.\t|");
 		System.out.println("\t*****************************************");
@@ -63,7 +65,8 @@ public class Main {
 			
 			if(input.equalsIgnoreCase("printr")){ trainingToggle ^= true; continue;}
 			if(input.equalsIgnoreCase("printc")){ printChoice ^= true; continue;}
-			if(input.equalsIgnoreCase("printall")){ fullDebug ^= true; continue;}	
+			if(input.equalsIgnoreCase("printall")){ fullDebug ^= true; continue;}
+			if(input.equalsIgnoreCase("querydb")){ queryMode();}
 			
 			if(input.equalsIgnoreCase("exit")){ 
 				System.out.print("Writing conversation: " + convoName + " ... Done.");
@@ -110,6 +113,40 @@ public class Main {
 		reader.close();
 	}
 	
+	public static void queryMode() throws IOException{
+		
+		InputStreamReader Qsreader = new InputStreamReader(System.in);
+		BufferedReader Qreader = new BufferedReader(Qsreader);
+		
+		System.out.println("Please enter your query, the result set will be printed below.\n"
+				+ "Enter exit to return to previous mode"
+				+ "Enter print for a prompt to save results to file");
+		
+		String input = null, filename = null;
+		ResultSet tempSet = null;
+		while(true){
+			
+			input = Qreader.readLine();
+			
+			if(input.equalsIgnoreCase("exit")){ break;}
+			if(input.equalsIgnoreCase("print")){
+		
+					System.out.println("Please enter the filename for file output of result set:");	
+					filename = Qreader.readLine();
+					try {WebAgentDB.rsToFile(tempSet, filename);} 
+					catch (SQLException e) { System.out.println("Result set not available");}
+					System.out.println(filename + ".txt written");
+					continue;
+				}
+			
+			try {tempSet = WebAgentDB.queryDB(input);} 
+			catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Please format your query correctly");
+			}		
+		}
+	}
+	
 	public static void launchGUI(){
 		
 		mainWindow = new JFrame("\tWebAgent\t");
@@ -127,6 +164,7 @@ public class Main {
 		System.out.println("WebAgent help:");
 		System.out.println(
 		 "printr\t-\tTo change modes, Bot vs. Training\n" +
+		 "querydb\t-\tTo pass a mySQL query to the database\n" +
 		 "printm\t-\tTo print WebAgent's memory\n" +
 		 "printl\t-\tTo print WebAgent's dictionary\n" +
 		 "printd\t-\tTo reprint the current discussion\n" );
