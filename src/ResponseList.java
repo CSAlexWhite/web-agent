@@ -16,6 +16,7 @@ public class ResponseList {
 	int nextEmpty = 1; 		// set the first position	
 	int repeatID = 0;		// the position to reference if a repeat phrase
 							// is found
+	Boolean afterInit = false;
 	
 	public ResponseList(int size){
 					
@@ -38,7 +39,7 @@ public class ResponseList {
 
 		else{
 			masterList[nextEmpty] = newResponse;		// put the first response
-														// into the array					
+			if(afterInit) WebAgentDB.addToDictDB(newResponse.toString().length(), newResponse.toString());											// into the array
 			Main.memory.addEdge(last, newResponse);
 			nextEmpty++;			
 			Main.memory.dimension = nextEmpty;
@@ -125,6 +126,7 @@ public class ResponseList {
 	
 	public void readFile(String filename) throws IOException{
 		
+		System.out.print("IMPORTING DICTIONARY ...");
 		String nextLine = null;	
 		BufferedReader inFile = new BufferedReader(new FileReader(filename));
 		
@@ -132,11 +134,18 @@ public class ResponseList {
 		while(inFile.ready()){
 			
 			nextLine = inFile.readLine();
+			WebAgentDB.addToDictDB(nextLine.length(), nextLine);
 			add(nextLine, lineNum);
 			lineNum++;
 			nextEmpty = lineNum;
 		}
 		
+		System.out.println("\t" + lineNum + " responses.");
+		//buildDictDB();
 		inFile.close();
+	}
+	
+	public void buildDictDB(){
+		
 	}
 }

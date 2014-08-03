@@ -35,7 +35,7 @@ public class InputListener implements ActionListener{
 		
 		input = mainUI.inputField.getText();
 		if(input.equalsIgnoreCase("print")){ 
-			try {discussion.writeFile();} catch (IOException e1) {input = null; return;}
+			try {discussion.writeFile();} catch (IOException e1) {input = ""; return;}
 		}
 		mainUI.inputField.setText("");
 		mainUI.conversationArea.append("USER->\t" + input + "\n");
@@ -43,8 +43,9 @@ public class InputListener implements ActionListener{
 		/*TRAINING MODE*/
 		if(trainingToggle == false){
 			
+			
 			Main.discussion.addNext(input);	
-			next = new Response(last, input, true);
+			next = new Response(last, input, true);					
 			last = next;
 							
 			if(Main.fullDebug == true){
@@ -57,9 +58,11 @@ public class InputListener implements ActionListener{
 		if(trainingToggle == true){
 			
 			Main.discussion.addNext("USER->\t" + input);	
-			next = new Response(last, input, false);			
+			next = new Response(last, input, false);
+			WebAgentDB.addToConvoDB(next.getID(), true, last.getID());
 			last = next;	
-			next = memory.getNext(last);// AI ALGORITHM!!	
+			next = memory.getNext(last);// AI ALGORITHM!!
+			WebAgentDB.addToConvoDB(next.getID(), false, last.getID());
 			last = next;
 			
 			Main.discussion.addNext("BOT->\t" + next.toString());	// adds the content to the discussion

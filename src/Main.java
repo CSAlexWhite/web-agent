@@ -1,10 +1,4 @@
-import java.awt.GraphicsEnvironment;
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.Scanner;
 
 import javax.swing.JFrame;
 
@@ -23,11 +17,9 @@ public class Main {
 	static WebAgentUI mainInterface;
 	
 	public static void main(String[] args) throws Exception {
-	
-		/* INITIALIZING RESPONSE VARIABLES */
-		String input = null, convoName = null;
-		Response last = null, next = null;
 		
+		WebAgentDB.connect();
+	
 		/* STUFF FOR INITIALIZING MEMORY AND HISTORY */
 		int brainSize = 10000;
 		dictionary = new ResponseList(brainSize);
@@ -38,7 +30,16 @@ public class Main {
 		dictionary.readFile("list.data");
 		memory.readFile("matrix.data");
 					
-		launchGUI();
+		System.out.println("LAUNCHING USER INTERFACE ...");
+		launchGUI();	
+		WebAgentDB.disconnect();	
+	}
+	
+	public static void launchConsole() throws IOException{
+			
+		/* INITIALIZING RESPONSE VARIABLES */
+		String input = null, convoName = null;
+		Response last = null, next = null;
 		
 		/* STUFF FOR READING CONSOLE INPUT */
 		InputStreamReader sreader = new InputStreamReader(System.in);
@@ -46,17 +47,15 @@ public class Main {
 					
 		/* START THE [CONSOLE-BASED] CONVERSATION */
 		last = dictionary.getResponseAt(0);
-		System.out.println(last.toString());		
+		System.out.println("\t*****************************************");
+		System.out.println("\t|   Welcome to the WebAgent console. \t|\n\t| "
+							  + "Press help at any time to receive it.\t|");
+		System.out.println("\t*****************************************");
+		System.out.println("BOT->\t" + last.toString());		
 		while(true){ System.out.print("USER->\t");
 					
 			input = reader.readLine();
-			Response test1 = dictionary.getResponseAt(1);
-			Response test2 = dictionary.getResponseAt(167);
-			//if(test1.equals(test2.toString())) System.out.println("EQUALS!");
-			//else System.out.println("NOT EQUALS!");
-			
-			test1.equals(test2);
-			
+				
 			/*DEBUGGING OPTIONS*/
 			if(input.equalsIgnoreCase("printm")){ memory.print(); continue;}
 			if(input.equalsIgnoreCase("printl")){ dictionary.print(); continue;}
@@ -67,11 +66,11 @@ public class Main {
 			if(input.equalsIgnoreCase("printall")){ fullDebug ^= true; continue;}	
 			
 			if(input.equalsIgnoreCase("exit")){ 
-				
-				//convoName = discussion.writeFile(); 
 				System.out.print("Writing conversation: " + convoName + " ... Done.");
 				break;
 			}
+			
+			if(input.equalsIgnoreCase("help")){ printHelp(); continue;}
 			
 			/*TRAINING MODE*/
 			if(trainingToggle == false){
@@ -103,8 +102,7 @@ public class Main {
 			}
 			
 			dictionary.writeFile("list.data");
-			memory.writeFile("matrix.data");
-			
+			memory.writeFile("matrix.data");		
 		}
 		
 		discussion.writeFile();
@@ -122,5 +120,15 @@ public class Main {
 	    mainWindow.add(mainInterface);
 	    mainWindow.pack();
 	    mainWindow.setVisible(true);
+	}
+	
+	public static void printHelp(){
+		
+		System.out.println("WebAgent help:");
+		System.out.println(
+		 "printr\t-\tTo change modes, Bot vs. Training\n" +
+		 "printm\t-\tTo print WebAgent's memory\n" +
+		 "printl\t-\tTo print WebAgent's dictionary\n" +
+		 "printd\t-\tTo reprint the current discussion\n" );
 	}
 }

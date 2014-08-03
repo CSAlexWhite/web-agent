@@ -8,7 +8,9 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
+import javax.print.attribute.standard.Sides;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
@@ -24,22 +26,23 @@ public class WebAgentUI extends JPanel implements ActionListener{
 	JTextField inputField;
 	
 	JButton trainingMode;
-	JButton importMode;
+	JButton consoleMode;
 
 	String input;
 	
 	InputListener processor;
+	
 	TrainingToggle mode;
+	TrainingToggle console;
 	
 	public WebAgentUI(){
-		
+			
 		mainWindow = Main.mainWindow;
 		menuBar = new JMenuBar();
 		createFileMenu();
 				
 		setLayout(new BorderLayout());
 		processor = new InputListener(this);
-		mode = new TrainingToggle();
 		
 		/* NEW ACTION EVENT LABEL (CURRENTLY INACTLIVE) */
 		actionLabel = new JLabel("");
@@ -75,11 +78,20 @@ public class WebAgentUI extends JPanel implements ActionListener{
 		                		BorderFactory.createEmptyBorder(5,5,5,5)),
 		    areaScrollPane.getBorder()));
 			
-		/* BUTTONS AND TOGGLES FOR MODES, ETC.*/
+		/* BUTTONS AND TOGGLES FOR MODES, ETC.*/		
 		trainingMode = new JButton("USER MODE");
+		mode = new TrainingToggle(trainingMode);	
 			trainingMode.addActionListener(mode);
-		//importMode = new JButton("IMPORT MODE");
-		
+
+		@SuppressWarnings("serial")
+		JButton consoleMode = new JButton(new AbstractAction("CONSOLE MODE") {
+	        public void actionPerformed( ActionEvent e ) {
+	            Main.mainWindow.dispose();
+	            try {Main.launchConsole();} 
+	            catch (IOException e1) {}
+	        }
+	    });
+			
 		/* SET UP THE LEFT SUB-JPANEL */
 		JPanel textControlsPane = new JPanel();				
 	    GridBagLayout gridbag = new GridBagLayout();
@@ -98,7 +110,7 @@ public class WebAgentUI extends JPanel implements ActionListener{
 	    /* SET UP THE RIGHT SUB-JPANEL */	
 	    	JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                     trainingMode,
-                    importMode);
+                    consoleMode);
 				splitPane.setOneTouchExpandable(false);
 				splitPane.setResizeWeight(0.5);
 				JPanel rightPane = new JPanel(new GridLayout(4,0));
@@ -119,6 +131,8 @@ public class WebAgentUI extends JPanel implements ActionListener{
         JLabel[] labels = {inputFieldLabel};
         JTextField[] textFields = {inputField};
         addLabelTextRows(labels, textFields, gridbag, textControlsPane);
+        
+        displayWelcome();
 	}
 	
 
@@ -174,5 +188,25 @@ public class WebAgentUI extends JPanel implements ActionListener{
     	
     	mainWindow.setJMenuBar(menuBar);
     	menuBar.add(fileMenu);  	
+    }
+    
+    private void displayWelcome(){
+    	
+    	String t = 
+    			"Hello and welcome to WebAgent, Version 0.1.1\n" +
+    			"Your main activity here will be to chat with\n" +
+    			"the bot.  Please, if you would like to chat with\n" + 
+    			"him click the button that says \"User Mode\".\n" +
+    			"It will switch now to \"Bot Mode\".  Remain in\n" + 
+    			"training mode if you would like to input a\n" +  
+    			"preselected course of conversation, in which you\n" +
+    			"play both Sides. You can also load in a transcript\n" +
+    			"using File/Import Conversation.  If you would like\n" +
+    			"to save your banter, use File/Print Conversation.\n" + 
+    			"If you would like to open a command line for more\n" + 
+    			"advanced functions and debugging tools, press the\n" + 
+    			"\"Console Mode\" button. Have fun!\n\n";
+    	
+    	conversationArea.setText(t);
     }
 }

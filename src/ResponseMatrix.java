@@ -84,7 +84,7 @@ public class ResponseMatrix {
 			if(matrix[fromID][i] > 0){ 
 				notZeros++;
 				extants.push(Main.dictionary.getResponseAt(i));
-				System.out.print(Main.dictionary.getResponseAt(i) + " OR ");
+				//System.out.print(Main.dictionary.getResponseAt(i) + " OR ");
 			}
 			if(matrix[fromID][i] > maxValue){ 
 				maxValue = matrix[fromID][i];
@@ -93,7 +93,7 @@ public class ResponseMatrix {
 		}
 		
 		toID1 = currentMax;
-		System.out.print("\nMax is: " + Main.dictionary.getResponseAt(toID1) + "\n");
+		//System.out.print("\nMax is: " + Main.dictionary.getResponseAt(toID1) + "\n");
 		if(extants.isEmpty()) return new Response("Huh?", 0);
 		
 		int test = (int)(Math.random()*100);
@@ -129,19 +129,22 @@ public class ResponseMatrix {
 	 */
 	public void readFile(String filename) throws IOException{
 		
+		System.out.print("REBUILDING MEMORY ...");
 		int readSize = Main.dictionary.nextEmpty;
 		
 		String nextLine = null;		
 		BufferedReader inFile = new BufferedReader(new FileReader(filename));
 		StringTokenizer lineToParse;
-				
-		for(int i=0; i<readSize; i++){
+		
+		int i=0;
+		for(i=0; i<readSize; i++){
 			nextLine = inFile.readLine();
 			lineToParse = new StringTokenizer(nextLine, " ");
 			
+			
 			for(int j=0; j<readSize; j++)
 				matrix[i][j] = Byte.parseByte(lineToParse.nextToken());		
-		}
+		} System.out.println("\t\t" + i*i + " bytes.");
 		
 		inFile.close();		
 	}
