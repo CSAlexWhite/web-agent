@@ -12,16 +12,20 @@ import java.io.PrintWriter;
  */
 public class ResponseList {
 	
-	private Response[] masterList;
-	int nextEmpty = 1; 		// set the first position	
-	int repeatID = 0;		// the position to reference if a repeat phrase
-							// is found
-	Boolean afterInit = false;
+	private Response[] masterList; 	// THE BIG LIST OF UNIQUE RESPONSES
+	int nextEmpty = 1; 				// SETS THE FIRST EMPTY POSITION
+	int repeatID = 0;		// THE POSITION TO REFERENCE FOR A REPEAT PHRASE
+							
+	Boolean afterInit = false; // TO TRACK IF THE DATABASE IS UPDATED YET
 	
+	/**
+	 * Constructor for the response list, initiates the list with some phrase.
+	 * @param size
+	 */
 	public ResponseList(int size){
 					
-		masterList = new Response[size];			// initialize the array
-		masterList[0] = new Response("Hi there!", 0);	// add the first response							
+		masterList = new Response[size];				// INITIALIZE THE ARRAY
+		masterList[0] = new Response("Hi there!", 0);	// ADD THE FIRST RESPONSE						
 	}
 	
 	/**
@@ -31,27 +35,49 @@ public class ResponseList {
 	 */
 	public void add(Response last, Response newResponse, float sensitivity){
 		
-		if(findResponse(newResponse.toString(), sensitivity)){ 	// if the response is already there
+		/* IF THE RESPONSE IS ALREADY THERE */
+		if(findResponse(newResponse.toString(), sensitivity)){ 	
 			
-			Main.memory.addEdge(last, Main.dictionary.getResponseAt(repeatID)); // increment the edge between
-			return;											// current and the repeat
+			/* INCREMENT THE EDGE WEIGHT BETWEEN THE CURRENT AND REPEAT RESPONSE */
+			Main.memory.addEdge(last, Main.dictionary.getResponseAt(repeatID)); 
+			return;										
 		}
 
 		else{
-			masterList[nextEmpty] = newResponse;		// put the first response
-			if(afterInit) WebAgentDB.addToDictDB(newResponse.toString().length(), newResponse.toString());											// into the array
+			
+			/* ADD THE NEW RESPONSE TO THE BIG LIST */
+			masterList[nextEmpty] = newResponse;
+			
+			/* THEN ADD THAT RESPONSE TO THE DATABASE IF PROGRAM HAS INITIALIZED
+			 * ALREADY*/
+			if(afterInit) WebAgentDB.addToDictDB(
+					newResponse.toString().length(), newResponse.toString());											// into the array
+			
+			/* THEN ADD AN EDGE BETWEEN THE LAST AND THE NEW RESPONSE ON THE
+			 * ADJACENCY MATRIX */
 			Main.memory.addEdge(last, newResponse);
-			nextEmpty++;			
-			Main.memory.dimension = nextEmpty;
+			nextEmpty++;							// INCREMENT END OF LIST
+			Main.memory.dimension = nextEmpty;				
 			return; 
 		}
 	}
 	
+	/**
+	 * A method to just add new Response to the list at a specific point, based
+	 * on a string input.
+	 * @param input
+	 * @param id
+	 */
 	public void add(String input, int id){
 		
 		masterList[id] = new Response(input, id);
 	}
 	
+	/**
+	 * A method to correctly add a new Response to the list at the right point,
+	 * based on a string input.
+	 * @param input
+	 */
 	public void add(String input){
 		
 		masterList[nextEmpty] = new Response(input, nextEmpty);
@@ -80,14 +106,15 @@ public class ResponseList {
 	 */
 	public Boolean findResponse(String target, float sensitivity){
 		
-		//System.out.println("findResponse : " + nextEmpty);
-			
-		for(int i=0; i<nextEmpty*10; i++){				// Search for the target
-			//System.out.println(i);
+		/* SEARCH FOR THE TARGET IN A RANDOM MANNER, SINCE WE DON'T ALWAYS
+		 * WANT WHAT THE LAST RESPONSE WAS, OR ONE IN ORDER 
+		 * MAKES THE BOT SEEM CRAZIER, THOUGH */	
+		for(int i=0; i<nextEmpty*10; i++){	
 			int j = (int)(Math.random()*nextEmpty);
+			
+			/* IF THE MATCH IS BELOW THE SENSITIVITY, KEEP LOOPING */
 			if(masterList[j].equals(target) >= sensitivity){
-				repeatID = j;	// where the target is
-				//System.out.println("Match is: " + masterList[repeatID]);
+				repeatID = j;	
 				return true;
 			}			
 		}
@@ -104,6 +131,9 @@ public class ResponseList {
 		return nextEmpty;
 	}
 	
+	/**
+	 * Prints to the console the current master list of responses
+	 */
 	public void print(){
 		
 		for(int i=0; i<nextEmpty; i++){
@@ -112,42 +142,50 @@ public class ResponseList {
 		}
 	}
 	
+	/**
+	 * Writes the current master list of responses to the correct data file.
+	 * @param filename
+	 * @throws IOException
+	 */
 	public void writeFile(String filename) throws IOException{
 		
 		PrintWriter newFile = new PrintWriter(filename);
-		
-		for(int i=0; i<nextEmpty; i++){
-			
-			newFile.println(masterList[i]);
-		}
-		
+		for(int i=0; i<nextEmpty; i++) newFile.println(masterList[i]);		
 		newFile.close();
 	}
 	
-	public void readFile(String filename) throws IOException{
+	/**
+	 * Reads in the current correct data file so the program can function.
+	 * @param filename
+	 * @param first
+	 * @throws IOException
+	 */
+	public void readFile(String filename, boolean first) throws IOException{
 		
+		String nextLine = null;	// THE NEXT LINE TO READ
+		
+		/* FIRST, ERASE THE DATABASE DICTIONARY, IT WILL BE REBUILT 
+		 * THIS AVOIDS APPENDING THE DICTIONARY, AND DOUBLING IT */
 		WebAgentDB.instruct("TRUNCATE TABLE dictionary");
 		
-		System.out.print("IMPORTING DICTIONARY ...\n");
-		String nextLine = null;	
-		BufferedReader inFile = new BufferedReader(new FileReader(filename));
+		/* ONLY PRINT IMPORTING DICTIONARY AT PROGRAM LAUNCH */
+		if(first) System.out.print("IMPORTING DICTIONARY ...\n");
 		
-		System.out.print("UPDATING DATABASE ...\t");
-		int lineNum = 0;
+		BufferedReader inFile = new BufferedReader(new FileReader(filename));	
+		System.out.print("UPDATING DATABASE ...\t");	
+		
+		/* NOW READ IN THE FILE LINE BY LINE AND APPEND THE CONTENTS
+		 * TO THE DATABSE AND TO THE LIST */
+		int lineNum = 0;	
 		while(inFile.ready()){
 			
 			nextLine = inFile.readLine();
-			WebAgentDB.addToDictDB(nextLine.length(), nextLine);
-			add(nextLine, lineNum);
-			lineNum++;
-			nextEmpty = lineNum;
+			
+			WebAgentDB.addToDictDB(nextLine.length(), nextLine); 	// ADD TO DB
+			add(nextLine, lineNum); lineNum++; nextEmpty = lineNum; // ADD TO LIST
 		}
 		
 		System.out.println("\t" + lineNum + " responses.");
 		inFile.close();
-	}
-	
-	public void buildDictDB(){
-		
 	}
 }

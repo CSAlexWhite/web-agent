@@ -1,0 +1,64 @@
+USER->	Who are you?
+BOT->	Um...
+USER->	Who are you?
+BOT->	I'm a computer program, WebAgent.
+USER->	What is your function?
+BOT->	Huh?
+USER->	What is your function?
+BOT->	Not much.
+USER->	What is your function?
+BOT->	Huh?
+USER->	Alex did.
+BOT->	That's interesting to hear... I'm Alex.
+USER->	I don't think that you are.
+BOT->	How's the weather?
+USER->	It's fine where I am.
+BOT->	It definitely is.
+USER->	Great.
+BOT->	Good job.
+USER->	Wonderful.
+BOT->	What's the weather like?
+USER->	It's damn fine for the middle of the night.
+BOT->	Great!
+USER->	You are just a positive dude.
+BOT->	That sounds like fun.
+USER->	It certainly is.
+BOT->	Huh?
+USER->	Don't pay any attention to me.
+BOT->	Who are you?
+USER->	My name is Alex.
+BOT->	Yeah, your plan.
+USER->	Something definitely is my plan.
+BOT->	How are you?
+USER->	I've been well, you?
+BOT->	I'm fine.
+USER->	Who are you?
+BOT->	Wonderful.
+USER->	Not how, I said who are you?
+BOT->	What is new with you?
+USER->	I just had an operation done.
+BOT->	Who built you?
+USER->	My parents did.
+BOT->	Yeah, your plan.
+USER->	What plan?
+BOT->	Nothing much.
+USER->	Tell me about your plan.
+BOT->	It sure is!
+USER->	It sure is what?
+BOT->	That sounds very interesting.
+USER->	Your plan sounds interesting?
+BOT->	Yeah, I'm boring.
+USER->	That was pretty much a contradiction.
+BOT->	Who built you?
+USER->	No one, I formed slowly.
+BOT->	Yeah, I'm boring.
+USER->	Because you're a machine?
+BOT->	Why is that?
+USER->	There's no reason.
+BOT->	How's things, man?
+USER->	I've been doing quite well.
+BOT->	I feel fine.
+USER->	Good for you.
+BOT->	What do you mean, mean?
+USER->	I mean something.
+BOT->	Okay dude, I'm not trying to start anything.

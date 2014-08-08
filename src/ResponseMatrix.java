@@ -12,12 +12,11 @@ import java.util.StringTokenizer;
  */
 public class ResponseMatrix {
 		
-	public byte[][] matrix;
-	public int dimension;
+	public byte[][] matrix;	// THE ADJACENCY MATRIX REPRESENTATION OF THE GRAPH
+							// SAVED IN BYTES, BECAUSE IT MIGHT GET REALLY BIG
+	public int dimension;	// THE CURRENT SIZE OF THE GRAPH, FOR PRINTING
 	
-	public int totalResponses;
-	
-	int start = 0; // start a the first user-entered response
+	int start = 0; // START AT THE FIRST USER-GENERATED RESPONSE
 	
 	/**
 	 * The data structure for the stored conversation: a directed graph.  Implements 
@@ -27,15 +26,16 @@ public class ResponseMatrix {
 	 */
 	public ResponseMatrix(int size){
 		
-		dimension = size;
-		matrix = new byte[size][size];	
+		dimension = size;				// GET THE SIZE TO MAKE IT
+		matrix = new byte[size][size];	// INSTANTIATE THE OUTER ARRAY
 		
-		for(int i=0; i<size; i++) matrix[i] = new byte[size];			
-		for(int i=0; i<size; i++){			
-			for(int j=0; j<size; j++) matrix[i][j] = 0;			
+		for(int i=0; i<size; i++) 		// INSTANTIATE THE INNER ARRAY
+			matrix[i] = new byte[size]; 
+		
+		for(int i=0; i<size; i++){		// SET IT ALL EQUAL TO ZERO	
+			for(int j=0; j<size; j++) 
+				matrix[i][j] = 0;			
 		}	
-		
-		//matrix[0][0] = 1;
 	}
 	
 	/**
@@ -47,78 +47,58 @@ public class ResponseMatrix {
 	 */
 	public void addEdge(Response from, Response to){
 		
-		dimension = Main.dictionary.nextEmpty;
-		matrix[from.getID()][to.getID()]++;
+		dimension = Main.dictionary.nextEmpty;		// UPDATE THE DIMENSION
+		matrix[from.getID()][to.getID()]++;			// ADD WEIGHT TO THE GRAPH
 	}
 	
 	public void addEdge(int from, int to){ matrix[from][to]++;}
 
 	/**
+	 * AI ALGORITHM
 	 * The response choice algorithm.  Looks in the matrix for what to say next.
 	 * @param from
 	 * @return
 	 */
 	public Response getNext(Response from){
 		
-		dimension = Main.dictionary.nextEmpty - 2;
-		int fromID = from.getID();
-		int toID1, toID2, toID3;
-		int readValue = matrix[fromID][1];
+		dimension = Main.dictionary.nextEmpty - 2;	// GET THE DIMENSION
+		int toID1, fromID = from.getID();		 	// GET THE RESPONSE ID
 		
-		Stack <Response> extants = new Stack<Response>();
+		/* A STACK TO PUSH EXISTING EDGES ONTO AS THEY'RE FOUND */
+		Stack <Response> extants = new Stack<Response>();  
 		
-		int maxValue = 0;
-		int currentMax = 0;
-		
-//		for(int i=0; i<dimension; i++){ 
-//			if(matrix[fromID][i] > maxValue){ 
-//				maxValue = matrix[fromID][i];
-//				currentMax = i;
-//			}
-//		}
-//	
-//		toID1 = currentMax;
-		
-		int notZeros = 0;
+		int maxValue = 0, currentMax = 0, notZeros = 0; // FOR TRACKING WEIGHTS		
+		 					
+		/* LOOK ACROSS THE ROW VECTOR FOR THE CURRENT RESPONSE */
 		for(int i=0; i<dimension; i++){ 
-			if(matrix[fromID][i] > 0){ 
+			
+			/* IF WE FOUND ANYTHING, PUSH IT AS A RESPONSE TO THE STACK */
+			if(matrix[fromID][i] > 0){ 				
 				notZeros++;
 				extants.push(Main.dictionary.getResponseAt(i));
-				//System.out.print(Main.dictionary.getResponseAt(i) + " OR ");
 			}
+			
+			/* KEEP TRACK OF THE CURRENT MAXIMUM WEIGHTED EDGE */
 			if(matrix[fromID][i] > maxValue){ 
 				maxValue = matrix[fromID][i];
 				currentMax = i;
 			}
 		}
 		
+		/* SET THE CURRENT MAX */
 		toID1 = currentMax;
-		//System.out.print("\nMax is: " + Main.dictionary.getResponseAt(toID1) + "\n");
+		
+		/* IF NO NATURAL (OR UNNATURAL EVEN) RESPONSE, REPLY AS FOLLOWS */
 		if(extants.isEmpty()) return new Response("Huh?", 0);
 		
-		int test = (int)(Math.random()*100);
-		
+		/* FIND A RANDOM RESPONSE THAT MAY OR MAY NOT BE THE HIGHEST WEIGHT
+		 * BY PICKING A RANDOM NUMBER BETWEEN ZERO AND THE SIZE OF THE STACK 
+		 * GIVE A TWO-THIRDS CHANGE TO PICK THE RANDOM ONE, AND ONE-THIRD
+		 * TO PICK THE HIGHEST WEIGHTED ONE */
+		int test = (int)(Math.random()*100);	
 		if(maxValue > notZeros) return Main.dictionary.getResponseAt(toID1);
 		if(test%3==0 || test%3==2) return Main.dictionary.getResponseAt(toID1);
-		else return extants.elementAt((int)(Math.random()*extants.size()));
-		
-//		toID1 = currentMax;
-		
-//		while(readValue == 0 && toID1 < dimension){
-//			
-//			toID1++;
-//			readValue = matrix[fromID][toID1];
-//		}	
-		
-		//int toID2 = (int)(Math.random()*dimension)-1;
-		//if(toID1 >= dimension) toID1 = (int)(Math.random()*dimension);
-		//System.out.println("ID1 = " + toID1 + " and ID2 = " + toID2);
-		//System.out.println("Range = " + dimension);
-		
-		
-		//if((toID1+toID2)%2 == 0) 
-		//	return Main.dictionary.getResponseAt(toID1);
-		//else return Main.dictionary.getResponseAt(toID2);		
+		else return extants.elementAt((int)(Math.random()*extants.size()));	
 	}
 	
 	/**
@@ -130,20 +110,23 @@ public class ResponseMatrix {
 	public void readFile(String filename) throws IOException{
 		
 		System.out.print("REBUILDING MEMORY ...");
-		int readSize = Main.dictionary.nextEmpty;
+		int readSize = Main.dictionary.nextEmpty;		
 		
 		String nextLine = null;		
 		BufferedReader inFile = new BufferedReader(new FileReader(filename));
 		StringTokenizer lineToParse;
 		
-		int i=0;
+		/* TO RECONSTITUTE THE MATRIX, DOUBLE FOR LOOP */
+		int i=0; // SO WE CAN USE I LATER TO PRINT THE SIZE
 		for(i=0; i<readSize; i++){
+			
 			nextLine = inFile.readLine();
 			lineToParse = new StringTokenizer(nextLine, " ");
 			
-			
+			/* PARSE THE BYTES IN THE LINE, ADD TO MATRIX */
 			for(int j=0; j<readSize; j++)
-				matrix[i][j] = Byte.parseByte(lineToParse.nextToken());		
+				matrix[i][j] = Byte.parseByte(lineToParse.nextToken());	
+			
 		} System.out.println("\t\t" + i*i + " bytes.");
 		
 		inFile.close();		
@@ -157,15 +140,14 @@ public class ResponseMatrix {
 	public void writeFile(String filename) throws IOException{
 		
 		int writeSize = Main.dictionary.nextEmpty;
-
 		PrintWriter newFile = new PrintWriter(filename);
 		
+		/* WRITES THE MATRIX, LINE BY LINE, TO THE APPROPRIATE DATA FILE */
 		for(int i=0; i<writeSize; i++){		
 			for(int j=0; j<writeSize; j++) newFile.print(matrix[i][j] + " ");
 						
 			newFile.println();
 		}
-		
 		newFile.close();
 	}
 	
@@ -176,8 +158,10 @@ public class ResponseMatrix {
 	 */
 	public void print(){
 		
-		int printSize = Main.dictionary.nextEmpty;
-		
+		/* HERE WE PRINT THE MATRIX TO THE CONSOLE, USING COORDINATES
+		 * AND ON THE RIGHT, THE RESPONSE CONTENTS, FOR REFERENCE AND
+		 * DEBUGGING OF THE EDGE-ADDING AND RESPONSE-FINDING ALGORITHMS */
+		int printSize = Main.dictionary.nextEmpty;		
 		System.out.println("REPEAT ID : " + Main.dictionary.repeatID);
 		System.out.print("\t");
 		for(int i=0; i<printSize; i++) System.out.print(i + "  ");
@@ -196,6 +180,7 @@ public class ResponseMatrix {
 		System.out.println("");
 	}
 	
+	/* ANOTHER DEBUGGING FEATURE, TO OUTPUT DECISION VARIABLES OF THE AI */
 	String choice1, choice2;
 	public void printC(){
 		
