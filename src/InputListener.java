@@ -68,6 +68,7 @@ public class InputListener implements ActionListener{
 			 * AND ADDS IT TO THE DATABASE */
 			Main.discussion.addNext("USER->\t" + input);	
 			next = new Response(last, input, false);
+			
 			WebAgentDB.addToConvoDB(next.getID(), true, last.getID());
 			
 			/* GETS THE NEXT RESPONSE FROM THE BOT AND ADDS IT TO THE DATABASE

@@ -39,7 +39,7 @@ public class ResponseList {
 		if(findResponse(newResponse.toString(), sensitivity)){ 	
 			
 			/* INCREMENT THE EDGE WEIGHT BETWEEN THE CURRENT AND REPEAT RESPONSE */
-			Main.memory.addEdge(last, Main.dictionary.getResponseAt(repeatID)); 
+			Main.memory.addEdge(last, getResponseAt(repeatID)); 
 			return;										
 		}
 
